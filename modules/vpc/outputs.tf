@@ -3,17 +3,17 @@ output "vpc_id" {
 }
 
 output "privare_subnet" {
-  value = aws_subnet.db-private.*.id
+  value = aws_subnet.private.*.id
 }
 
 output "public_subnet" {
-  value = aws_subnet.web-public.*.id
+  value = aws_subnet.public.*.id
 }
 
 output "private_sg" {
-  value = aws_security_group.db-sg.id
+  value = aws_security_group.private-sg.id
 }
 
 output "public_sg" {
-  value = aws_security_group.web-sg.id
+  value = aws_security_group.public-sg.id
 }
