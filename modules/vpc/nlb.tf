@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "web-nlb-tg" {
   name = "web-nlb-tg"
   port = 80
   protocol = "tcp"
-  vpc_id = var.vpc_id
+  vpc_id = aws_vpc.vpc.id
   target_type = "instance"
   health_check {
     interval = 60
