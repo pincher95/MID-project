@@ -14,4 +14,4 @@ variable "ingress_ports" {
   default     = [22]
 }
 
-variable "web-instance-id" {}
+variable "public-instance-id" {}
