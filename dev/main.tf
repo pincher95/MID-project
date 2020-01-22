@@ -19,8 +19,7 @@ module "vpc" {
   source = "../modules/vpc"
   cidr_block = var.cidr_block
   availability_zone = var.availability_zone
-  web-instance-id = module.compute.web-instance
-
+  public-instance-id = module.compute.web-instance
 }
 
 module "compute" {
