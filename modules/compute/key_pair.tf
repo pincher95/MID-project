@@ -10,5 +10,10 @@ resource "aws_key_pair" "server_key" {
 
 resource "local_file" "server_key" {
   sensitive_content = tls_private_key.server_key.private_key_pem
-  filename = "demo.pem"
+  filename = "project.pem"
+}
+
+resource "local_file" "server_key_public" {
+  sensitive_content = tls_private_key.server_key.public_key_pem
+  filename = "project.pub"
 }
