@@ -30,3 +30,7 @@ variable "cidr_block" {
 variable "ec2_type" {
   default = "t2.micro"
 }
+
+
+
+#----------k8s Variables---------------

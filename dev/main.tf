@@ -3,6 +3,7 @@ terraform {
 }
 
 provider "aws" {
+  version = ">=2.28.1"
   region = var.aws_region
 }
 
@@ -30,4 +31,9 @@ module "compute" {
   private_sg = module.vpc.private_sg
   public_sg = module.vpc.public_sg
   availability_zone = var.availability_zone
+}
+
+module "k8s" {
+  source = "../modules/k8s"
+  subnet_id = var.availability_zone
 }
