@@ -39,3 +39,10 @@ variable "ec2_type" {
 
 
 #----------k8s Variables---------------
+
+
+
+#----------Jenkins Variables------------
+variable "default_locals" {
+
+}
