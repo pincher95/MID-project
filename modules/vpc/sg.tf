@@ -59,3 +59,30 @@ resource "aws_security_group" "private-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
+#k8s worker sg
+#################################
+# CIDR will be "My IP" \ all Ips from which you need to access the worker nodes
+resource "aws_security_group" "worker_group_mgmt_one" {
+  name_prefix = "worker_group_mgmt_one"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "209.88.185.5/32",
+      "207.232.13.77/32",
+      "192.168.1.0/32",
+      "89.138.10.68/32"
+    ]
+  }
+  ingress {
+    from_port = 30017
+    to_port     = 30017
+    protocol    = "tcp"
+  }
+}

@@ -25,6 +25,11 @@ variable "cidr_block" {
   description = "CIDR block"
   default = "10.0.0.0/16"
 }
+
+variable "environment" {
+  description = "Project Environment"
+  default     = "dev"
+}
 #----------Compute Variables------------
 
 variable "ec2_type" {

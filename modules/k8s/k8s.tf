@@ -27,26 +27,26 @@ module "eks" {
   source       = "terraform-aws-modules/eks/aws"
   cluster_name = local.cluster_name
   #TODO Subnet id
-  subnets      = ["subnet-0572a748", "subnet-18b1b744", "subnet-8b3035ec", "subnet-984a49b6"]
+  subnets      = var.subnet_id
 
   tags = {
-    Environment = "test"
+    Environment = var.env
     GithubRepo  = "terraform-aws-eks"
     GithubOrg   = "terraform-aws-modules"
   }
 
-  vpc_id = "vpc-c17b2abb"
+  vpc_id = var.vpc_id
 
   # TODO Worker group 1
   # One Subnet
   worker_groups = [
     {
       name                          = "worker-group-1"
-      instance_type                 = "t2.medium"
+      instance_type                 = var.worker_node_type
       additional_userdata           = "echo foo bar"
       asg_desired_capacity          = 2
       # TODO Subnet
-      #additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
+      additional_security_group_ids = [var.worker_sg]
     }
 
   ]

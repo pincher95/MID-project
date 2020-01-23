@@ -7,7 +7,7 @@ output "privare_subnet" {
 }
 
 output "public_subnet" {
-  value = aws_subnet.public.*.id
+  value = [aws_subnet.public.*.id]
 }
 
 output "private_sg" {
@@ -16,4 +16,8 @@ output "private_sg" {
 
 output "public_sg" {
   value = aws_security_group.public-sg.id
+}
+
+output "worker_sg" {
+  value = aws_security_group.worker_group_mgmt_one.id
 }
