@@ -37,12 +37,6 @@ resource "aws_instance" "bastion-server" {
     destination = "/home/ubuntu/.ssh/id_rsa"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo echo -e '\tStrictHostKeyChecking no' >> /etc/ssh/ssh_config"
-    ]
-  }
-
   tags = {
     Name = "Bastion_Server"
   }
