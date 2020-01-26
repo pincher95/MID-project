@@ -6,6 +6,23 @@ locals {
   java_opts = "JAVA_OPTS='-Djenkins.install.runSetupWizard=false'"
 }
 
+resource "local_file" "ssh" {
+  content     = <<-EOT
+    Host 10.*
+      ProxyCommand ssh -W %h:%p bastion
+      IdentityFile ../dev/keys/project.pem
+
+    Host ${var.bastion_ip[0]}
+      Hostname bastion
+      User ubuntu
+      IdentityFile ../dev/keys/project.pem
+      ControlMaster auto
+      ControlPath ./ansible/ansible-%r@%h:%p
+      ControlPersist 5m
+  EOT
+  filename = "../ansible/ssh.cfg"
+}
+
 resource "aws_instance" "jenkins_master" {
   ami = "ami-07d0cf3af28718ef8"
   instance_type = var.jenkis_ec2_type
@@ -36,12 +53,13 @@ resource "aws_instance" "jenkins_master" {
     ]
   }
 
-//  provisioner "remote-exec" {
-//    inline = [
-//      "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
-//    ]
-//  }
-
+    provisioner "local-exec" {
+      working_dir = "../ansible"
+      command = <<-EOT
+        sleep 60;
+        ansible -u ubuntu -i ${aws_instance.jenkins_master.public_ip}, -m setup
+      EOT
+    }
   tags = {
     Name = "Jenkins Master"
   }
