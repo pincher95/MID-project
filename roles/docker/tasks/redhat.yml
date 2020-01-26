@@ -1,0 +1,43 @@
+---
+#--------------Redhat install--------------
+- name: Remove old Docker or Docker-engine packages
+  yum:
+    name:
+    - docker
+    - docker-client
+    - docker-client-latest 
+    - docker-common 
+    - docker-latest 
+    - docker-latest-logrotate 
+    - docker-logrotate 
+    - docker-engine
+    state: absent
+
+- name: Install required system packages for YUM management systems
+  yum:
+    name:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    state: latest
+
+- name: Add Docker repo
+  get_url:
+   url: https://download.docker.com/linux/centos/docker-ce.repo
+   dest: /etc/yum.repos.d/docer-ce.repo
+
+- name: Install Docker CE
+  yum:
+    name:
+    - docker-ce-{{ docker_version | default('*') }}
+    - docker-ce-cli-{{ docker_version | default('*') }}
+    - containerd.io
+    state: latest
+  notify:
+    - Start Docker
+
+- name: Add user to Docker group
+  user:
+    name: "{{ docker_user | default('ec2-user') }}"
+    group: docker
+    append: yes

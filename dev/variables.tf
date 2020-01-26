@@ -3,6 +3,7 @@ terraform {
 }
 
 variable "aws_region" {
+  type = string
   description = "AWS region"
   default     = "us-east-1"
 }
@@ -36,7 +37,23 @@ variable "ec2_type" {
   default = "t2.micro"
 }
 
+variable "project_key_path" {
+  description = "Path to private project key"
+  type = string
+  default = "/Users/yuritsuprun/IdeaProjects/MID-project/dev/keys/project.pem"
+}
 
+variable "public_ec2_count" {
+  description = "Default ec2 in public subnet"
+  default = 1
+}
+
+variable "key_pair" {
+  description = "EC2 Key pair names, "
+  type = list(string)
+  default = ["project"]
+  #default = ["project_key", "jenkins_key", "bastion_key"]
+}
 
 #----------k8s Variables---------------
 
@@ -44,5 +61,5 @@ variable "ec2_type" {
 
 #----------Jenkins Variables------------
 variable "default_locals" {
-
+  default = "true"
 }
