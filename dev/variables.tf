@@ -37,24 +37,24 @@ variable "ec2_type" {
   default = "t2.micro"
 }
 
+variable "public_ec2_count" {
+  description = "Default ec2 in public subnet"
+  default = 1
+}
+#----------key-pair--------------------
 variable "project_key_path" {
   description = "Path to private project key"
   type = string
-  default = "./keys/project.pem"
+  default = "../keys/project.pem"
 }
 
 variable "project_public_path" {
   description = "Path to public project key"
   type = string
-  default = "./keys/project.pub"
+  default = "../keys/project.pub"
 }
 
-variable "public_ec2_count" {
-  description = "Default ec2 in public subnet"
-  default = 1
-}
-
-variable "key_pair" {
+variable "key_pair_names" {
   description = "EC2 Key pair names, "
   type = list(string)
   default = ["project"]

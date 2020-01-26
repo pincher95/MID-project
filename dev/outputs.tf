@@ -1,8 +1,7 @@
-
-output "vpc_id" {
-  value = module.vpc.vpc_id
+output "bastion_public_ip" {
+  value = module.bastion.bastion_public_ip
 }
 
-output "private_subnet" {
-  value = module.vpc.privare_subnet
+output "jenkins_ip" {
+  value = module.jenkins.jenkins_ip
 }

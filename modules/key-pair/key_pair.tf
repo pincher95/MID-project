@@ -13,13 +13,13 @@ resource "aws_key_pair" "server_key" {
 resource "local_file" "server_key_private" {
   count = length(var.key_pair)
   sensitive_content = tls_private_key.server_key[count.index].private_key_pem
-  filename = "${path.root}/keys/${element(var.key_pair, count.index)}.pem"
+  filename = "../${path.root}/keys/${element(var.key_pair, count.index)}.pem"
   file_permission = "0400"
 }
 
 resource "local_file" "server_key_public" {
   count = length(var.key_pair)
   sensitive_content = tls_private_key.server_key[count.index].public_key_pem
-  filename = "${path.root}/keys/${element(var.key_pair, count.index)}.pub"
+  filename = "../${path.root}/keys/${element(var.key_pair, count.index)}.pub"
   file_permission = "0400"
 }

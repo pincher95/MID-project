@@ -22,35 +22,33 @@ module "vpc" {
   env = var.environment
 }
 
-module "compute" {
-  source = "../modules/compute"
-  ec2_type = var.ec2_type
-  private_subnet = module.vpc.privare_subnet
-  public_subnet = module.vpc.public_subnet
-  private_sg = module.vpc.private_sg
-  public_sg = module.vpc.public_sg
-  availability_zone = var.availability_zone
-  key_pair = var.key_pair
-  public_ec2_count = var.public_ec2_count
-  private_key_path = var.project_key_path
-  public_key_path = var.project_public_path
-  bastion_ip = ""
-  depend_on = ""
-  jenkis_ec2_type = var.ec2_type
-  jenkis_sg = module.vpc.jenkins_sg
-  private_key = ""
+module "key_pair" {
+  source = "../modules/key-pair"
+  key_pair = var.key_pair_names
 }
 
-//module "jenkins" {
-//  source = "../modules/jenkins"
-//  jenkis_ec2_type = var.ec2_type
-//  jenkis_sg = module.vpc.jenkins_sg
-//  private_key = var.project_key_path
-//  bastion_ip = module.compute.public_ip
-//  private_key_path = var.project_key_path
-//  #dependency = module.compute.local_private
-//  depend_on = module.compute.local_private
-//}
+module "bastion" {
+  source = "../modules/bastion"
+  availability_zone = var.availability_zone
+  ec2_type = var.ec2_type
+  private_key_path = var.project_key_path
+  public_aws_key = module.key_pair.aws_key_name
+  public_ec2_count = var.public_ec2_count
+  public_sg = module.vpc.public_sg
+  public_subnet = module.vpc.public_subnet
+}
+
+module "jenkins" {
+  source = "../modules/jenkins"
+  jenkis_ec2_type = var.ec2_type
+  jenkis_sg = module.vpc.jenkins_sg
+  private_sg = module.vpc.private_sg
+  private_key = var.project_key_path
+  bastion_ip = module.bastion.bastion_public_ip
+  private_key_path = var.project_key_path
+  public_aws_key = module.key_pair.aws_key_name
+  private_subnet = module.vpc.privare_subnet
+}
 
 //module "k8s" {
 //  source = "../modules/k8s"

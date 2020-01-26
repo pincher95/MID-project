@@ -13,18 +13,15 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "bastion-server" {
+resource "aws_instance" "bastion" {
   count = var.public_ec2_count
   availability_zone = element(var.availability_zone, count.index)
   subnet_id = element(var.public_subnet, count.index)
   ami = data.aws_ami.ubuntu.id
   instance_type = var.ec2_type
   vpc_security_group_ids = [var.public_sg]
-  key_name = aws_key_pair.server_key[0].key_name
+  key_name = var.public_aws_key[0]
 
-  depends_on = [local_file.server_key_private]
-
-  //  ssh keys
   connection {
     type = "ssh"
     user = "ubuntu"
