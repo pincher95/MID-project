@@ -25,29 +25,22 @@ resource "aws_instance" "bastion-server" {
   depends_on = [local_file.server_key_private]
 
   //  ssh keys
-  provisioner "file" {
-    source = var.private_key_path
-    destination = "/home/ubuntu/.ssh/id_rsa"
-
-
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      host = self.public_ip
-      private_key = file(var.private_key_path)
-    }
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    host = self.public_ip
+    private_key = file(var.private_key_path)
   }
 
   provisioner "file" {
-    source = var.public_key_path
-    destination = "/home/ubuntu/.ssh/known_hosts"
+    source = var.private_key_path
+    destination = "/home/ubuntu/.ssh/id_rsa"
+  }
 
-    connection {
-      type = "ssh"
-      user = "ubuntu"
-      host = self.public_ip
-      private_key = file(var.private_key_path)
-    }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo echo -e '\tStrictHostKeyChecking no' >> /etc/ssh/ssh_config"
+    ]
   }
 
   tags = {

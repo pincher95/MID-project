@@ -14,22 +14,15 @@ resource "aws_instance" "jenkins_master" {
   key_name = aws_key_pair.server_key[0].key_name
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
   depends_on = [local_file.server_key_private]
-  #security_groups = var.jenkis_sg
 
   connection {
     host = self.private_ip
     user = "ubuntu"
     private_key = file(var.private_key_path)
-    bastion_host = aws_instance.bastion-server[0].public_ip
-  }
 
-//  provisioner "local-exec" {
-//    working_dir = "../ansible-roles"
-//    command = <<EOT
-//      sleep;
-//      ansible-playbook docker.yml -i ${}
-//    EOT
-//  }
+    bastion_host = aws_instance.bastion-server[0].public_ip
+    bastion_user = "ubuntu"
+  }
 
   provisioner "remote-exec" {
     inline = [
@@ -43,6 +36,7 @@ resource "aws_instance" "jenkins_master" {
       "sudo chown -R 1000:1000 ${local.jenkins_home}"
     ]
   }
+
   provisioner "remote-exec" {
     inline = [
       #TODO need to deside how to provision and fire up jenkins master
@@ -62,14 +56,14 @@ resource "aws_instance" "jenkins_agent" {
   key_name = aws_key_pair.server_key[0].key_name
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
   depends_on = [local_file.server_key_private]
-  #security_groups = var.jenkis_sg
 
   connection {
     host = self.private_ip
     user = "ec2-user"
     private_key = file(var.private_key_path)
+
     bastion_host = aws_instance.bastion-server[0].public_ip
-    #agent = true
+    bastion_user = "ubuntu"
   }
 
   provisioner "remote-exec" {
