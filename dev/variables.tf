@@ -40,7 +40,13 @@ variable "ec2_type" {
 variable "project_key_path" {
   description = "Path to private project key"
   type = string
-  default = "/Users/yuritsuprun/IdeaProjects/MID-project/dev/keys/project.pem"
+  default = "./keys/project.pem"
+}
+
+variable "project_public_path" {
+  description = "Path to public project key"
+  type = string
+  default = "./keys/project.pub"
 }
 
 variable "public_ec2_count" {

@@ -23,6 +23,14 @@ resource "aws_instance" "jenkins_master" {
     bastion_host = aws_instance.bastion-server[0].public_ip
   }
 
+//  provisioner "local-exec" {
+//    working_dir = "../ansible-roles"
+//    command = <<EOT
+//      sleep;
+//      ansible-playbook docker.yml -i ${}
+//    EOT
+//  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update -y",
@@ -61,12 +69,13 @@ resource "aws_instance" "jenkins_agent" {
     user = "ec2-user"
     private_key = file(var.private_key_path)
     bastion_host = aws_instance.bastion-server[0].public_ip
+    #agent = true
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo yum update -y",
-      "sudo yum install java-1.8.0 docker git -y",
+      "sudo apt-get update -y",
+      "sudo apt-get install java-1.8.0 docker git -y",
       "sudo alternatives --install /usr/bin/java java /usr/java/latest/bin/java 1",
       "sudo alternatives --config java",
 //      "sudo yum install docker git -y",
@@ -74,6 +83,7 @@ resource "aws_instance" "jenkins_agent" {
       "sudo usermod -aG docker ec2-user"
     ]
   }
+
 
   tags = {
     Name = "Jenkins Agent"

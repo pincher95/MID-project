@@ -33,6 +33,7 @@ module "compute" {
   key_pair = var.key_pair
   public_ec2_count = var.public_ec2_count
   private_key_path = var.project_key_path
+  public_key_path = var.project_public_path
   bastion_ip = ""
   depend_on = ""
   jenkis_ec2_type = var.ec2_type
@@ -40,16 +41,16 @@ module "compute" {
   private_key = ""
 }
 
-module "jenkins" {
-  source = "../modules/jenkins"
-  jenkis_ec2_type = var.ec2_type
-  jenkis_sg = module.vpc.jenkins_sg
-  private_key = var.project_key_path
-  bastion_ip = module.compute.public_ip
-  private_key_path = var.project_key_path
-  #dependency = module.compute.local_private
-  depend_on = module.compute.local_private
-}
+//module "jenkins" {
+//  source = "../modules/jenkins"
+//  jenkis_ec2_type = var.ec2_type
+//  jenkis_sg = module.vpc.jenkins_sg
+//  private_key = var.project_key_path
+//  bastion_ip = module.compute.public_ip
+//  private_key_path = var.project_key_path
+//  #dependency = module.compute.local_private
+//  depend_on = module.compute.local_private
+//}
 
 //module "k8s" {
 //  source = "../modules/k8s"

@@ -29,6 +29,19 @@ resource "aws_instance" "bastion-server" {
     source = var.private_key_path
     destination = "/home/ubuntu/.ssh/id_rsa"
 
+
+    connection {
+      type = "ssh"
+      user = "ubuntu"
+      host = self.public_ip
+      private_key = file(var.private_key_path)
+    }
+  }
+
+  provisioner "file" {
+    source = var.public_key_path
+    destination = "/home/ubuntu/.ssh/known_hosts"
+
     connection {
       type = "ssh"
       user = "ubuntu"
