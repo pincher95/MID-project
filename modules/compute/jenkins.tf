@@ -68,10 +68,10 @@ resource "aws_instance" "jenkins_agent" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install java-1.8.0 docker git -y",
+      "sudo yum update -y",
+      "sudo yum install java-1.8.0 docker git -y",
       "sudo alternatives --install /usr/bin/java java /usr/java/latest/bin/java 1",
-      "sudo alternatives --config java",
+      "sudo alternatives --config java <<< '1'",
 //      "sudo yum install docker git -y",
       "sudo service docker start",
       "sudo usermod -aG docker ec2-user"

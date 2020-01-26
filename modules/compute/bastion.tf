@@ -35,6 +35,7 @@ resource "aws_instance" "bastion-server" {
   provisioner "file" {
     source = var.private_key_path
     destination = "/home/ubuntu/.ssh/id_rsa"
+
   }
 
   tags = {
