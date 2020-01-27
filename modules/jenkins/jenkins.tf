@@ -9,20 +9,15 @@ locals {
 resource "local_file" "ssh" {
   content     = <<-EOT
     Host *
-      user ubuntu
-      StrictHostKeyChecking no
-      ProxyCommand ssh -W %h:%p ${var.bastion_ip[0]}
+      User ubuntu
       IdentityFile ../keys/project.pem
+      ProxyCommand ssh -W %h:%p ubuntu@${var.bastion_ip[0]}
 
-    Host bastion
+    Host ${var.bastion_ip[0]}
       Hostname ${var.bastion_ip[0]}
       User ubuntu
-      StrictHostKeyChecking no
-      IdentityFile ../keys/project.pem
-      BatchMode yes
-      ControlMaster auto
-      ControlPath ~/.ssh/ansible-%r@%h:%p
-      ControlPersist 5m
+      IdentityFile ..keys/project.pem
+      ForwardAgent yes
   EOT
   filename = "../ansible/ssh.cfg"
 }
@@ -60,8 +55,9 @@ resource "aws_instance" "jenkins_master" {
     provisioner "local-exec" {
       working_dir = "../ansible"
       command = <<-EOT
-        sleep 60;
-        ansible -u ubuntu -i ${aws_instance.jenkins_master.private_ip}, -m setup
+        sleep 30;
+        ssh-add ${var.private_key};
+        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, docker.yml
       EOT
     }
   tags = {

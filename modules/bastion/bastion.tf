@@ -32,7 +32,12 @@ resource "aws_instance" "bastion" {
   provisioner "file" {
     source = var.private_key_path
     destination = "/home/ubuntu/.ssh/id_rsa"
+  }
 
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 0400 ~/.ssh/id_rsa"
+    ]
   }
 
   tags = {
