@@ -11,13 +11,14 @@ resource "local_file" "ssh" {
     Host *
       user ubuntu
       StrictHostKeyChecking no
-      ProxyCommand ssh -W %h:%p -q ubuntu@${var.bastion_ip[0]}
-      IdentityFile ../dev/keys/project.pem
+      ProxyCommand ssh -W %h:%p ${var.bastion_ip[0]}
+      IdentityFile ../keys/project.pem
 
     Host bastion
       Hostname ${var.bastion_ip[0]}
       User ubuntu
-      IdentityFile ../dev/keys/project.pem
+      StrictHostKeyChecking no
+      IdentityFile ../keys/project.pem
       BatchMode yes
       ControlMaster auto
       ControlPath ~/.ssh/ansible-%r@%h:%p
