@@ -44,6 +44,7 @@
 
 - name: Add user to Docker group
   user:
-    name: "{{ docker_user | default('ubuntu') }}"
+    name: "{{ item }}"
     group: docker
     append: yes
+  with_items: "{{ docker_users }}"
