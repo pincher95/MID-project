@@ -6,6 +6,13 @@ locals {
   java_opts = "JAVA_OPTS='-Djenkins.install.runSetupWizard=false'"
 }
 
+//data "template_file" "jenkins_configure_ec2" {
+//  template = file(var.jenkins_cred_path)
+//  vars = {
+//    ssh_private_key = file(var.private_key_path)
+//  }
+//}
+
 resource "local_file" "ssh" {
   content     = <<-EOT
     Host *

@@ -38,25 +38,25 @@ module "bastion" {
   public_subnet = module.vpc.public_subnet
 }
 
-//module "jenkins" {
-//  source = "../modules/jenkins"
-//  jenkis_ec2_type = var.ec2_type
-//  jenkis_sg = module.vpc.jenkins_sg
-//  private_sg = module.vpc.private_sg
-//  private_key = var.project_key_path
-//  bastion_ip = module.bastion.bastion_public_ip
-//  private_key_path = var.project_key_path
-//  public_aws_key = module.key_pair.aws_key_name
-//  private_subnet = module.vpc.privare_subnet
-//}
-
-module "k8s" {
-  source = "../modules/k8s"
-  subnet_id = module.vpc.privare_subnet
-  env = var.environment
-  tags = ""
-  vpc_id = module.vpc.vpc_id
-  worker_group_name = ""
-  worker_node_type = var.ec2_type
-  worker_sg = module.vpc.worker_sg
+module "jenkins" {
+  source = "../modules/jenkins"
+  jenkis_ec2_type = var.ec2_type
+  jenkis_sg = module.vpc.jenkins_sg
+  private_sg = module.vpc.private_sg
+  private_key = var.project_key_path
+  bastion_ip = module.bastion.bastion_public_ip
+  private_key_path = var.project_key_path
+  public_aws_key = module.key_pair.aws_key_name
+  private_subnet = module.vpc.privare_subnet
 }
+
+//module "k8s" {
+//  source = "../modules/k8s"
+//  subnet_id = module.vpc.privare_subnet
+//  env = var.environment
+//  tags = ""
+//  vpc_id = module.vpc.vpc_id
+//  worker_group_name = ""
+//  worker_node_type = var.ec2_type
+//  worker_sg = module.vpc.worker_sg
+//}
