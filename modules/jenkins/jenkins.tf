@@ -57,7 +57,7 @@ resource "aws_instance" "jenkins_master" {
       command = <<-EOT
         sleep 30;
         ssh-add ${var.private_key};
-        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --tags Debian --extra-vars "docker_users=ubuntu"
+        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
       EOT
     }
   tags = {
