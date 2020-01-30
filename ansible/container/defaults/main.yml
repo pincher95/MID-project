@@ -1,0 +1,4 @@
+---
+# defaults file for container
+default_container_name: jenkins_master
+default_container_image: jenkins/jenkins
