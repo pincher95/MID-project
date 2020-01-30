@@ -27,7 +27,7 @@ module "eks" {
   source       = "terraform-aws-modules/eks/aws"
   cluster_name = local.cluster_name
   #TODO Subnet id
-  subnets      = var.subnet_id
+  subnets      = concat(var.private_subnet_id, var.public_subnet_id)
 
   tags = {
     Environment = var.env
@@ -45,7 +45,7 @@ module "eks" {
       instance_type                 = var.worker_node_type
       additional_userdata           = "echo foo bar"
       asg_desired_capacity          = 2
-      # TODO Subnet
+      subnets = var.private_subnet_id
       additional_security_group_ids = [var.worker_sg]
     }
 

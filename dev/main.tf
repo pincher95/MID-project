@@ -52,7 +52,8 @@ module "jenkins" {
 
 module "k8s" {
   source = "../modules/k8s"
-  subnet_id = module.vpc.privare_subnet
+  private_subnet_id = module.vpc.privare_subnet
+  public_subnet_id = module.vpc.public_subnet
   env = var.environment
   tags = ""
   vpc_id = module.vpc.vpc_id
