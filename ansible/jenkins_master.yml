@@ -1,6 +1,15 @@
 ---
 - hosts: all
+<<<<<<< Updated upstream
   become: yes
   become_method: sudo
   roles:
     - docker
+=======
+#  remote_user: root
+  become: yes
+  become_method: sudo
+  roles:
+    - docker
+#    - container
+>>>>>>> Stashed changes
