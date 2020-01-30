@@ -69,3 +69,9 @@ variable "key_pair_names" {
 variable "default_locals" {
   default = "true"
 }
+
+variable "jenkins_cred_path" {
+  description = "Jenkins credentials xml"
+  type = string
+  default = "./templates/credentials.xml.tpl"
+}
