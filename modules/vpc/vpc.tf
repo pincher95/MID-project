@@ -30,6 +30,7 @@ resource "aws_subnet" "public" {
   availability_zone       = element(var.availability_zone, count.index)
   tags = {
     Name = "public-${element(var.availability_zone, count.index)}"
+    kubernetes.io/role/elb = 1
   }
 }
 
@@ -43,5 +44,6 @@ resource "aws_subnet" "private" {
   availability_zone       = element(var.availability_zone, count.index)
   tags = {
     Name = "private-${element(var.availability_zone, count.index)}"
+    kubernetes.io/role/internal-elb = 1
   }
 }

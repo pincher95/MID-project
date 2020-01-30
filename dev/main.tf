@@ -50,13 +50,13 @@ module "jenkins" {
   private_subnet = module.vpc.privare_subnet
 }
 
-//module "k8s" {
-//  source = "../modules/k8s"
-//  subnet_id = module.vpc.privare_subnet
-//  env = var.environment
-//  tags = ""
-//  vpc_id = module.vpc.vpc_id
-//  worker_group_name = ""
-//  worker_node_type = var.ec2_type
-//  worker_sg = module.vpc.worker_sg
-//}
+module "k8s" {
+  source = "../modules/k8s"
+  subnet_id = module.vpc.privare_subnet
+  env = var.environment
+  tags = ""
+  vpc_id = module.vpc.vpc_id
+  worker_group_name = ""
+  worker_node_type = var.ec2_type
+  worker_sg = module.vpc.worker_sg
+}
