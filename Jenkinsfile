@@ -12,7 +12,7 @@ node('jenkins_agent') {
 
   }
   stage('Run Tests') {
-    sh "docker run --rm ${customImage.id}"
+    sh "docker run --rm -d ${customImage.id}"
   }
   stage('Push to Docker Hub') { // Run the built image
     withDockerRegistry(credentialsId: 'pincher95') {
