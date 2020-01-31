@@ -9,6 +9,9 @@ locals {
   dockerhub_password = "123EVanmb"
   jenkins_username = "admin"
   jenkins_password = "admin"
+  git_url = "https://github.com/pincher95/MID-project.git"
+  project_name = "opsschool-mid-project"
+  msg = "installing plugins"
 }
 
 //resource "local_file" "ssh" {
@@ -31,6 +34,21 @@ data "template_file" "jenkins_configure_dockerhub_credentials" {
   vars = {
     dockerhub_username = local.dockerhub_username
     dockerhub_password = local.dockerhub_password
+  }
+}
+
+data "template_file" "install_plugins" {
+  template = file("../templates/install_plugins.groovy.tpl")
+  vars = {
+    msg = local.msg
+  }
+}
+
+data "template_file" "pipeline_init" {
+  template = file("../templates/pipeline_init.groovy.tpl")
+  vars = {
+    git_url = local.git_url
+    project_name = local.project_name
   }
 }
 
@@ -93,6 +111,15 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/dockerhub_credentials.groovy"
   }
 
+  provisioner "file" {
+    content     = data.template_file.install_plugins.rendered
+    destination = "/tmp/install_plugins.groovy"
+  }
+
+  provisioner "file" {
+    content     = data.template_file.pipeline_init.rendered
+    destination = "/tmp/pipeline_init.groovy"
+  }
 //  provisioner "file" {
 //    content     = data.template_file.jenkins_configure_ssh.rendered
 //    destination = "${local.jenkins_home}/init.groovy.d/jenkins_configure_ssh.groovy"
@@ -100,7 +127,7 @@ resource "aws_instance" "jenkins_master" {
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered
-    destination = "/tmp/init.groovy.d/setup_users.groovy"
+    destination = "/tmp/setup_users.groovy"
   }
 
 //  provisioner "file" {
@@ -137,6 +164,7 @@ resource "aws_instance" "jenkins_master" {
       working_dir = "../ansible"
       command = <<-EOT
         ssh-add ${var.private_key};
+        export ANSIBLE_HOST_KEY_CHECKING=False;
         ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
       EOT
     }

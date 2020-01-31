@@ -1,4 +1,4 @@
-node('jenkins_micro_aws_slave') {
+node('jenkins_agent') {
 
   def DockerImage = "foaas:v1.0"
   def customImage = null
