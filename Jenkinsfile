@@ -20,6 +20,6 @@ node('jenkins_agent') {
     }
   }
   stage('Deploy to K8s') { // Run tests on container
-    kubernetesDeploy(configs: 'k8s/*', kubeconfigId: 'kube-config', textCredentials: [serverUrl: 'https://'])
+    kubernetesDeploy(configs: 'aws_eks/*', kubeconfigId: 'kube-config', textCredentials: [serverUrl: 'https://'])
   }
 }

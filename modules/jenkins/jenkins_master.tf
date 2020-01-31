@@ -52,13 +52,13 @@ data "template_file" "pipeline_init" {
   }
 }
 
-//data "template_file" "jenkins_configure_ssh" {
-//  template = file("../templates/ssh_credentials.groovy.tpl")
-//  vars = {
-//    jenkins_ssh_key = file(var.private_key_path)
-//  }
+data "template_file" "jenkins_configure_ssh" {
+  template = file("../templates/ssh_credentials.groovy.tpl")
+  vars = {
+    jenkins_ssh_key = file(var.private_key_path)
+  }
 //  depends_on = [var.private_key]
-//}
+}
 
 data "template_file" "jenkins_configure_jenkins_credentials" {
   template = file("../templates/setup_users.groovy.tpl")
@@ -120,10 +120,10 @@ resource "aws_instance" "jenkins_master" {
     content     = data.template_file.pipeline_init.rendered
     destination = "/tmp/pipeline_init.groovy"
   }
-//  provisioner "file" {
-//    content     = data.template_file.jenkins_configure_ssh.rendered
-//    destination = "${local.jenkins_home}/init.groovy.d/jenkins_configure_ssh.groovy"
-//  }
+  provisioner "file" {
+    content     = data.template_file.jenkins_configure_ssh.rendered
+    destination = "/tmp/jenkins_configure_ssh.groovy"
+  }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered

@@ -15,7 +15,7 @@ import org.jenkinsci.plugins.plaincredentials.impl.*
 // parameters
 def jenkinsMasterKeyParameters = [
   description:  'Jenkins Master SSH Key',
-  id:           'Session3_jenkins_keyPair',
+  id:           'jenkins_SSH_Key',
   secret:       '',
   userName:     'ubuntu',
   key:          new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource('''${jenkins_ssh_key}''')
