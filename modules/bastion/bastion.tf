@@ -44,3 +44,22 @@ resource "aws_instance" "bastion" {
     Name = "Bastion_Server"
   }
 }
+
+resource "local_file" "ssh" {
+  count = var.public_ec2_count
+  content     = <<-EOT
+    Host *
+      User ubuntu
+      IdentityFile ../keys/project.pem
+      ProxyCommand ssh -W %h:%p ubuntu@${aws_instance.bastion[0].public_ip}
+
+    Host ${aws_instance.bastion[0].public_ip}
+      Hostname ${aws_instance.bastion[0].public_ip}
+      User ubuntu
+      IdentityFile ..keys/project.pem
+      ForwardAgent yes
+  EOT
+  filename = "../ansible/ssh.cfg"
+
+  depends_on = [aws_instance.bastion]
+}

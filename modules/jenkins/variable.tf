@@ -6,6 +6,8 @@ variable "private_sg" {}
 
 variable "private_key" {}
 
+variable "public_key" {}
+
 variable "bastion_ip" {}
 
 variable "private_key_path" {}
