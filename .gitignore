@@ -1,1 +1,8 @@
 /MID-project.iml
+/modules/nlb/
+/dev/templates/
+/dev/loadbalancer.yaml
+/ansible/container/
+/ansible/jenkins_master/
+/ansible/novafloss.jenkins-api/
+/ansible/novafloss.jenkins-node/
