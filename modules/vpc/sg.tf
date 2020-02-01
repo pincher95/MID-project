@@ -81,9 +81,10 @@ resource "aws_security_group" "worker_group_mgmt_one" {
     ]
   }
   ingress {
-    from_port = 30017
-    to_port     = 30017
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -128,7 +129,7 @@ resource "aws_security_group" "jenkins" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-//  tags = {
-//    Name = ""
-//  }
+  tags = {
+    Name = "Jenkins SG"
+  }
 }

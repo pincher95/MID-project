@@ -30,14 +30,22 @@ resource "aws_instance" "jenkins_agent" {
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
-      "sudo yum install java-1.8.0 docker git -y",
+      "sudo yum install java-1.8.0 git -y",
       "sudo alternatives --install /usr/bin/java java /usr/java/latest/bin/java 1",
       "sudo alternatives --config java <<< '1'",
-      "sudo service docker start",
-      "sudo usermod -aG docker ec2-user"
+//      "sudo service docker start",
+//      "sudo usermod -aG docker ec2-user"
     ]
   }
 
+  provisioner "local-exec" {
+    working_dir = "../ansible"
+    command = <<-EOT
+        ssh-add ${var.private_key};
+        export ANSIBLE_HOST_KEY_CHECKING=False;
+        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ec2-user"
+      EOT
+  }
 
   tags = {
     Name = "Jenkins Agent"

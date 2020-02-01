@@ -37,13 +37,12 @@ data "template_file" "pipeline_init" {
   }
 }
 
-//data "template_file" "jenkins_configure_ssh" {
-//  template = file("../templates/ssh_credentials.groovy.tpl")
-//  vars = {
-//    jenkins_ssh_key = file(var.private_key_path)
-//  }
-//  depends_on = [var.module_depends_on]
-//}
+data "template_file" "jenkins_configure_ssh" {
+  template = file("../templates/ssh_credentials.groovy.tpl")
+  vars = {
+    jenkins_ssh_key = file(var.private_key_path)
+  }
+}
 
 data "template_file" "jenkins_configure_jenkins_credentials" {
   template = file("../templates/setup_users.groovy.tpl")
@@ -59,6 +58,7 @@ resource "aws_instance" "jenkins_master" {
   subnet_id = var.private_subnet[0]
   key_name = var.public_aws_key[0]
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
+  depends_on = [var.module_depends_on]
 
   connection {
     host = self.private_ip
@@ -94,10 +94,10 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/pipeline_init.groovy"
   }
 
-//  provisioner "file" {
-//    content     = data.template_file.jenkins_configure_ssh.rendered
-//    destination = "/tmp/jenkins_configure_ssh.groovy"
-//  }
+  provisioner "file" {
+    content     = data.template_file.jenkins_configure_ssh.rendered
+    destination = "/tmp/jenkins_configure_ssh.groovy"
+  }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered
