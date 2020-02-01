@@ -15,7 +15,7 @@ node('jenkins_agent') {
     sh "docker run --rm -d ${customImage.id}"
   }
   stage('Push to Docker Hub') { // Run the built image
-    withDockerRegistry(credentialsId: 'dockerhub-pincher95',url: 'https://hub.docker.com/r/pincher95/foaas') {
+    withDockerRegistry(credentialsId: 'dockerhub.pincher95',url: 'https://index.docker.io/v1/') {
         customImage.push()
     }
   }

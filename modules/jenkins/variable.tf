@@ -16,3 +16,7 @@ variable "public_aws_key" {}
 
 variable "private_subnet" {}
 
+variable "module_depends_on" {
+  type    = any
+  default = null
+}

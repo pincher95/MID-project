@@ -1,13 +1,13 @@
-//data "template_file" "user_data_slave" {
-//  template = file("scripts/join-cluster.sh.tpl")
-//
-//  vars {
-//    jenkins_url            = "http://${aws_instance.jenkins_master.private_ip}:8080"
-//    jenkins_username       = "admin"
-//    jenkins_password       = "admin"
-//    jenkins_credentials_id = "${var.jenkins_credentials_id}"
-//  }
-//}
+data "template_file" "user_data_slave" {
+  template = file("../scripts/join-cluster.sh.tpl")
+
+  vars = {
+    jenkins_url            = "http://${aws_instance.jenkins_master.private_ip}:8080"
+    jenkins_username       = "admin"
+    jenkins_password       = "admin"
+    jenkins_credentials_id = var.public_key
+  }
+}
 
 resource "aws_instance" "jenkins_agent" {
   ami = "ami-00068cd7555f543d5"
@@ -15,7 +15,7 @@ resource "aws_instance" "jenkins_agent" {
   subnet_id = var.private_subnet[1]
   key_name = var.public_aws_key[0]
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
-//  user_data = data.template_file.user_data_slave.rendered
+  user_data = data.template_file.user_data_slave.rendered
   depends_on = [aws_instance.jenkins_master]
 
   connection {

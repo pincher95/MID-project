@@ -6,8 +6,8 @@ import jenkins.model.Jenkins
 
 // parameters
 def jenkinsKeyUsernameWithPasswordParameters = [
-  description:  'Dockerhub Credentials',
-  id:           'dockerhub-pincher95',
+  description:  'Access to DockerHub (user: pincher95)',
+  id:           'dockerhub.pincher95',
   secret:       '${dockerhub_password}',
   userName:     '${dockerhub_username}'
 ]

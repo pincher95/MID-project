@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit
 
     def Map<String,Future<UpdateCenter.UpdateCenterJob>> updateCenterJobs = [:]
     /* plugins */ [
+            'ssh-slaves',
             'authentication-tokens',
             'build-monitor-plugin',
             'build-name-setter',

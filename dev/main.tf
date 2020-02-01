@@ -39,6 +39,7 @@ module "bastion" {
 }
 
 module "jenkins" {
+  module_depends_on = [module.key_pair]
   source = "../modules/jenkins"
   jenkis_ec2_type = var.ec2_type
   jenkis_sg = module.vpc.jenkins_sg
