@@ -37,12 +37,14 @@ data "template_file" "pipeline_init" {
   }
 }
 
-//data "template_file" "jenkins_configure_ssh" {
-//  template = file("../templates/ssh_credentials.groovy.tpl")
-//  vars = {
-//    jenkins_ssh_key = file(var.private_key_path)
-//  }
-//}
+data "template_file" "jenkins_configure_ssh" {
+  template = file("../templates/ssh_credentials.groovy.tpl")
+  vars = {
+    jenkins_ssh_key = file(var.private_key_path)
+    jenkins_slave_name = "ec2-user"
+  }
+  depends_on = [var.module_depends_on]
+}
 
 data "template_file" "jenkins_configure_jenkins_credentials" {
   template = file("../templates/setup_users.groovy.tpl")
@@ -94,10 +96,10 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/pipeline_init.groovy"
   }
 
-//  provisioner "file" {
-//    content     = data.template_file.jenkins_configure_ssh.rendered
-//    destination = "/tmp/jenkins_configure_ssh.groovy"
-//  }
+      provisioner "file" {
+        content     = data.template_file.jenkins_configure_ssh.rendered
+        destination = "/tmp/jenkins_configure_ssh.groovy"
+      }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered
@@ -107,6 +109,15 @@ resource "aws_instance" "jenkins_master" {
 //  provisioner "remote-exec" {
 //    script = "../scripts/restart_jenkins.sh"
 //  }
+
+  provisioner "local-exec" {
+    working_dir = "../ansible"
+    command = <<-EOT
+        ssh-add ${var.private_key};
+        export ANSIBLE_HOST_KEY_CHECKING=False;
+        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
+      EOT
+  }
 
   provisioner "remote-exec" {
     inline = [
@@ -119,19 +130,11 @@ resource "aws_instance" "jenkins_master" {
       "mv /tmp/*.groovy ${local.jenkins_home}/init.groovy.d/",
 //      "mkdir -p ${local.jenkins_home}",
       "sudo chown -R ubuntu:ubuntu ${local.jenkins_home}",
-//      "sleep 60",
-//      "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
+      "sleep 60",
+      "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
     ]
   }
 
-  provisioner "local-exec" {
-      working_dir = "../ansible"
-      command = <<-EOT
-        ssh-add ${var.private_key};
-        export ANSIBLE_HOST_KEY_CHECKING=False;
-        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
-      EOT
-    }
   tags = {
     Name = "Jenkins Master"
   }

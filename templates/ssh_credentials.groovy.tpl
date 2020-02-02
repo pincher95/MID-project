@@ -17,7 +17,7 @@ def jenkinsMasterKeyParameters = [
   description:  'Jenkins Master SSH Key',
   id:           'jenkins_SSH_Key',
   secret:       '',
-  userName:     'ubuntu',
+  userName:     '${jenkins_slave_name}',
   key:          new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource('''${jenkins_ssh_key}''')
 ]
 

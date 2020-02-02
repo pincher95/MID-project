@@ -25,7 +25,6 @@ resource "aws_iam_instance_profile" "eks-kubectl" {
   role = aws_iam_role.eks-full.name
 }
 
-
 data "template_file" "user_data_slave" {
   template = file("../scripts/join-cluster.sh.tpl")
 
@@ -33,7 +32,7 @@ data "template_file" "user_data_slave" {
     jenkins_url            = "http://${aws_instance.jenkins_master.private_ip}:8080"
     jenkins_username       = "admin"
     jenkins_password       = "admin"
-    jenkins_credentials_id = var.public_key
+    jenkins_credentials_id = file(var.public_key)
   }
 }
 
@@ -59,7 +58,7 @@ resource "aws_instance" "jenkins_agent" {
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
-      "sudo yum install java-1.8.0 git -y",
+      "sudo yum install java-1.8.0 docker git -y",
       "sudo alternatives --install /usr/bin/java java /usr/java/latest/bin/java 1",
       "sudo alternatives --config java <<< '1'",
       "curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl",
@@ -69,19 +68,10 @@ resource "aws_instance" "jenkins_agent" {
       "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator",
       "chmod +x ./aws-iam-authenticator",
       "mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin",
-      "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc"
-//      "sudo service docker start",
-//      "sudo usermod -aG docker ec2-user"
+      "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc",
+      "sudo service docker start",
+      "sudo usermod -aG docker ec2-user"
     ]
-  }
-
-  provisioner "local-exec" {
-    working_dir = "../ansible"
-    command = <<-EOT
-        ssh-add ${var.private_key};
-        export ANSIBLE_HOST_KEY_CHECKING=False;
-        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ec2-user"
-      EOT
   }
 
   tags = {
