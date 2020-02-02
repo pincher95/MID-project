@@ -22,7 +22,7 @@ node('jenkins_agent') {
   stage('Deploy to K8s') { // Run tests on container
 //     kubernetesDeploy(configs: 'dev/kubeconfig', kubeconfigId: 'kube-config', textCredentials: [serverUrl: 'https://'])
     sh '''
-        kubectl apply -f k8s_service_deployment.yaml --kubeconfig /home/ec2-user/kubeconfig
+        kubectl apply -f /home/ec2-user/k8s_service_deployment.yaml --kubeconfig /home/ec2-user/kubeconfig
     '''
   }
 }

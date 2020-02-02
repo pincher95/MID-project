@@ -1,3 +1,30 @@
+# Create an IAM role for eks kubectl
+resource "aws_iam_role" "eks-kubectl" {
+  name               = "opsschool-eks-kubectl"
+  assume_role_policy = file("./policy/assume-eks-role.json")
+}
+
+# Create the policy
+resource "aws_iam_policy" "eks-kubectl" {
+  name        = "opsschool-eks-kubectl"
+  description = "Allows unubtu node to run kubectl."
+  policy      = file("./policy/describe-eks-cluster.json")
+}
+
+# Attach the policy
+resource "aws_iam_policy_attachment" "eks-kubectl" {
+  name       = "opsschool-eks-kubectl"
+  roles      = [aws_iam_role.eks-kubectl.name]
+  policy_arn = aws_iam_policy.eks-kubectl.arn
+}
+
+# Create the instance profile
+resource "aws_iam_instance_profile" "eks-kubectl" {
+  name  = "opsschool-eks-kubectl"
+  role = aws_iam_role.eks-kubectl.name
+}
+
+
 data "template_file" "user_data_slave" {
   template = file("../scripts/join-cluster.sh.tpl")
 
@@ -16,6 +43,7 @@ resource "aws_instance" "jenkins_agent" {
   key_name = var.public_aws_key[0]
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
   user_data = data.template_file.user_data_slave.rendered
+  iam_instance_profile = aws_iam_instance_profile.eks-kubectl.name
   depends_on = [aws_instance.jenkins_master]
 
   connection {
@@ -33,6 +61,14 @@ resource "aws_instance" "jenkins_agent" {
       "sudo yum install java-1.8.0 git -y",
       "sudo alternatives --install /usr/bin/java java /usr/java/latest/bin/java 1",
       "sudo alternatives --config java <<< '1'",
+      "curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl",
+      "chmod +x ./kubectl",
+      "mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin",
+      "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc",
+      "curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator",
+      "chmod +x ./aws-iam-authenticator",
+      "mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin",
+      "echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc"
 //      "sudo service docker start",
 //      "sudo usermod -aG docker ec2-user"
     ]
