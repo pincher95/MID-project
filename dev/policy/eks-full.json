@@ -4,7 +4,8 @@
     {
       "Effect": "Allow",
       "Action": [
-        "eks:*"
+        "eks:*",
+        "ec2:DescribeInstances"
       ],
       "Resource": "*"
     }
