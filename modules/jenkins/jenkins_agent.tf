@@ -16,6 +16,11 @@ resource "aws_instance" "jenkins_agent" {
     bastion_user = "ubuntu"
   }
 
+  provisioner "file" {
+    source = "./kubeconfig"
+    destination = "/home/ec2-user"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
