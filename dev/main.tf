@@ -54,6 +54,7 @@ module "jenkins" {
   consul_join_tag_key = var.consul_join_tag_key
   consul_join_tag_value = var.consul_join_tag_value
   instance_profile = module.consul.instance_profile
+  consul_client_sg = module.vpc.consul_client_sg
 }
 
 module "k8s" {

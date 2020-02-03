@@ -3,9 +3,9 @@ resource "aws_instance" "jenkins_agent" {
   instance_type = var.jenkis_ec2_type
   subnet_id = var.private_subnet[1]
   key_name = var.public_aws_key[0]
-  vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
-  user_data = data.template_file.client.rendered
-  iam_instance_profile = [aws_iam_instance_profile.eks-kubectl.name, var.instance_profile]
+  vpc_security_group_ids = [var.jenkis_sg, var.private_sg, var.consul_client_sg]
+  user_data = data.template_cloudinit_config.consul_client[1].rendered
+  iam_instance_profile = aws_iam_instance_profile.eks-kubectl.name
 
   connection {
     host = self.private_ip

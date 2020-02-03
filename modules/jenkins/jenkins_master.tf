@@ -19,9 +19,9 @@ resource "aws_instance" "jenkins_master" {
   instance_type = var.jenkis_ec2_type
   subnet_id = var.private_subnet[0]
   key_name = var.public_aws_key[0]
-  vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
+  vpc_security_group_ids = [var.jenkis_sg, var.private_sg, var.consul_client_sg]
   iam_instance_profile = var.instance_profile
-  user_data = data.template_file.client.rendered
+  user_data = data.template_cloudinit_config.consul_client[0].rendered
   depends_on = [var.module_depends_on]
 
   connection {
@@ -57,15 +57,16 @@ resource "aws_instance" "jenkins_master" {
     content     = data.template_file.pipeline_init.rendered
     destination = "/tmp/pipeline_init.groovy"
   }
+
   provisioner "file" {
     content     = data.template_file.create_permanent_agent.rendered
     destination = "/tmp/create_permanent_agent.groovy"
   }
 
-  provisioner "file" {
-    content     = data.template_file.jenkins_configure_ssh.rendered
-    destination = "/tmp/jenkins_configure_ssh.groovy"
-  }
+//  provisioner "file" {
+//    content     = data.template_file.jenkins_configure_ssh.rendered
+//    destination = "/tmp/jenkins_configure_ssh.groovy"
+//  }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered

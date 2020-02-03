@@ -28,3 +28,5 @@ variable "consul_join_tag_key" {}
 variable "consul_join_tag_value" {}
 
 variable "instance_profile" {}
+
+variable "consul_client_sg" {}

@@ -1,6 +1,6 @@
 resource "aws_iam_role" "consul-join" {
   name               = "opsschool-consul-join"
-  assume_role_policy = file("./policy/assume-role.json")
+  assume_role_policy = file("./policy/assume-policy.json")
 }
 
 # Create the policy
