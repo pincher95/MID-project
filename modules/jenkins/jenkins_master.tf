@@ -14,6 +14,13 @@ locals {
   msg = "installing plugins"
 }
 
+data "template_file" "create_permanent_agent" {
+  template = file("../templates/create_permanent_agent.groovy.tpl")
+  vars = {
+    jenkins_agent_ip = aws_instance.jenkins_agent.private_ip
+  }
+}
+
 data "template_file" "jenkins_configure_dockerhub_credentials" {
   template = file("../templates/dockerhub_credentials.groovy.tpl")
   vars = {
@@ -95,20 +102,20 @@ resource "aws_instance" "jenkins_master" {
     content     = data.template_file.pipeline_init.rendered
     destination = "/tmp/pipeline_init.groovy"
   }
+  provisioner "file" {
+    content     = data.template_file.create_permanent_agent.rendered
+    destination = "/tmp/create_permanent_agent.groovy"
+  }
 
-      provisioner "file" {
-        content     = data.template_file.jenkins_configure_ssh.rendered
-        destination = "/tmp/jenkins_configure_ssh.groovy"
-      }
+  provisioner "file" {
+    content     = data.template_file.jenkins_configure_ssh.rendered
+    destination = "/tmp/jenkins_configure_ssh.groovy"
+  }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered
     destination = "/tmp/setup_users.groovy"
   }
-
-//  provisioner "remote-exec" {
-//    script = "../scripts/restart_jenkins.sh"
-//  }
 
   provisioner "local-exec" {
     working_dir = "../ansible"
@@ -128,7 +135,6 @@ resource "aws_instance" "jenkins_master" {
 //      "sudo usermod -aG docker ubuntu",
       "mkdir -p ${local.jenkins_home}/init.groovy.d",
       "mv /tmp/*.groovy ${local.jenkins_home}/init.groovy.d/",
-//      "mkdir -p ${local.jenkins_home}",
       "sudo chown -R ubuntu:ubuntu ${local.jenkins_home}",
       "sleep 60",
       "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"

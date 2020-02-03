@@ -1,4 +1,4 @@
-node('jenkins_agent') {
+node('agent-node-label') {
 
   def DockerImage = "foaas:v1.0"
   def customImage = null
