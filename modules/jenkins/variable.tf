@@ -20,3 +20,11 @@ variable "module_depends_on" {
   type    = any
   default = null
 }
+
+variable "namespace" {}
+
+variable "consul_join_tag_key" {}
+
+variable "consul_join_tag_value" {}
+
+variable "instance_profile" {}

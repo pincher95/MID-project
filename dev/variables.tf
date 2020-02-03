@@ -75,3 +75,22 @@ variable "jenkins_cred_path" {
   type = string
   default = "./templates/credentials.xml.tpl"
 }
+
+#-----------Consul Variables----------------
+variable "consul_servers" {
+  default = 3
+}
+
+variable "namespace" {
+  default = "consul"
+}
+
+variable "consul_join_tag_key" {
+  description = "The key of the tag to auto-jon on EC2."
+  default     = "consul_join"
+}
+
+variable "consul_join_tag_value" {
+  description = "The value of the tag to auto-join on EC2."
+  default     = "dev"
+}

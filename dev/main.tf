@@ -50,6 +50,10 @@ module "jenkins" {
   private_key_path = var.project_key_path
   public_aws_key = module.key_pair.aws_key_name
   private_subnet = module.vpc.privare_subnet
+  namespace = var.namespace
+  consul_join_tag_key = var.consul_join_tag_key
+  consul_join_tag_value = var.consul_join_tag_value
+  instance_profile = module.consul.instance_profile
 }
 
 module "k8s" {
@@ -62,4 +66,17 @@ module "k8s" {
   worker_group_name = ""
   worker_node_type = var.ec2_type
   worker_sg = module.vpc.worker_sg
+}
+
+module "consul" {
+  source = "../modules/consul"
+  availability_zone = ""
+  private_subnet_id = module.vpc.privare_subnet
+  consul_join_tag_key = var.consul_join_tag_key
+  consul_join_tag_value = var.consul_join_tag_value
+  consul_server_count = var.consul_servers
+  ec2_type = var.ec2_type
+  namespace = var.namespace
+  public_aws_key = module.key_pair.aws_key_name
+  consul_sg = module.vpc.consul_sg
 }

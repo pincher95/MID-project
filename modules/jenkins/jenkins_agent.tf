@@ -1,50 +1,11 @@
-# Create an IAM role for eks kubectl
-resource "aws_iam_role" "eks-full" {
-  description = "Accessing all of account EKS cluster API endpoints"
-  name               = "opsschool-eks-full"
-  assume_role_policy = file("./policy/assume-policy.json")
-}
-
-# Create the policy
-resource "aws_iam_policy" "eks-full" {
-  description = "EKS Full access policy"
-  name        = "opsschool-eks-full"
-  policy      = file("./policy/eks-full.json")
-}
-
-# Attach the policy
-resource "aws_iam_policy_attachment" "eks-full" {
-  name       = "opsschool-eks-full"
-  roles      = [aws_iam_role.eks-full.name]
-  policy_arn = aws_iam_policy.eks-full.arn
-}
-
-# Create the instance profile
-resource "aws_iam_instance_profile" "eks-kubectl" {
-  name  = "opsschool-eks-full"
-  role = aws_iam_role.eks-full.name
-}
-
-//data "template_file" "user_data_slave" {
-//  template = file("../scripts/join-cluster.sh.tpl")
-//
-//  vars = {
-//    jenkins_url            = "http://${aws_instance.jenkins_master.private_ip}:8080"
-//    jenkins_username       = "admin"
-//    jenkins_password       = "admin"
-//    jenkins_credentials_id = ""#file(var.public_key)
-//  }
-//}
-
 resource "aws_instance" "jenkins_agent" {
   ami = "ami-00068cd7555f543d5"
   instance_type = var.jenkis_ec2_type
   subnet_id = var.private_subnet[1]
   key_name = var.public_aws_key[0]
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg]
-//  user_data = data.template_file.user_data_slave.rendered
-  iam_instance_profile = aws_iam_instance_profile.eks-kubectl.name
-//  depends_on = [aws_instance.jenkins_master]
+  user_data = data.template_file.client.rendered
+  iam_instance_profile = [aws_iam_instance_profile.eks-kubectl.name, var.instance_profile]
 
   connection {
     host = self.private_ip

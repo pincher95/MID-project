@@ -26,6 +26,13 @@ output "jenkins_sg" {
   value = aws_security_group.jenkins.id
 }
 
+output "consul_sg" {
+  value = aws_security_group.opsschool_consul.id
+}
+
+output "consul_client_sg" {
+  value = aws_security_group.opsschool_client.id
+}
 output "private_subnet_ern" {
   value = aws_subnet.private.*.arn
 }
