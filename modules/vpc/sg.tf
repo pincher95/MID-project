@@ -139,6 +139,7 @@ resource "aws_security_group" "jenkins" {
 resource "aws_security_group" "opsschool_consul" {
   name        = "opsschool-consul"
   description = "Allow SSH & consul inbound traffic"
+  vpc_id = aws_vpc.vpc.id
 
   //  ingress {
   //    from_port   = 0
@@ -184,6 +185,7 @@ resource "aws_security_group" "opsschool_consul" {
 resource "aws_security_group" "opsschool_client" {
   name        = "opsschool-client"
   description = "Allow SSH & HTTP inbound traffic"
+  vpc_id = aws_vpc.vpc.id
 
   //  ingress {
   //    from_port   = 0
@@ -223,5 +225,9 @@ resource "aws_security_group" "opsschool_client" {
     protocol        = "-1"
     cidr_blocks     = ["0.0.0.0/0"]
     description     = "Allow all outside security group"
+  }
+
+  tags = {
+    Name = "Consul Client SG"
   }
 }

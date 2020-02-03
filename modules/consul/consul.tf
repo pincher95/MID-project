@@ -33,7 +33,7 @@ data "template_file" "server" {
 
 resource "aws_instance" "consule-server" {
   count             = var.consul_server_count
-  availability_zone = var.availability_zone
+//  availability_zone = var.availability_zone
   subnet_id         = var.private_subnet_id[0]
   ami               = data.aws_ami.ubuntu.id
   instance_type     = var.ec2_type
