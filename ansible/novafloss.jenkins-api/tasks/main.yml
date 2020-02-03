@@ -1,6 +1,0 @@
----
-- name: Install python-jenkins
-  pip:
-    executable: pip2
-    name: python-jenkins
-    state: latest

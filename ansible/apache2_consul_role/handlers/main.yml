@@ -1,0 +1,11 @@
+---
+# handlers file for apache2_consul_role
+- name: Start Apache
+  service:
+    name: apache2
+    enabled: yes
+    state: restarted
+- name: Reload consul agent
+  service:
+    name: consul
+    state: reloaded

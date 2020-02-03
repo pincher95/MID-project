@@ -1,0 +1,15 @@
+---
+# tasks file for apache2_consul_role
+- name: Install Apache web server
+  apt:
+    name: apache2
+    state: latest
+    update_cache: yes
+  notify:
+  - Start Apache
+- name: Copy configuration of consul webserver service
+  copy:
+    src: webserver.json
+    dest: /etc/consul.d/webserver.json
+  notify:
+  - Reload consul agent
