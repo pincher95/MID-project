@@ -63,10 +63,10 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/create_permanent_agent.groovy"
   }
 
-//  provisioner "file" {
-//    content     = data.template_file.jenkins_configure_ssh.rendered
-//    destination = "/tmp/jenkins_configure_ssh.groovy"
-//  }
+  provisioner "file" {
+    content     = data.template_file.jenkins_configure_ssh.rendered
+    destination = "/tmp/jenkins_configure_ssh.groovy"
+  }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_jenkins_credentials.rendered
@@ -78,6 +78,7 @@ resource "aws_instance" "jenkins_master" {
     command = <<-EOT
         ssh-add ${var.private_key};
         export ANSIBLE_HOST_KEY_CHECKING=False;
+        sleep 60;
         ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
       EOT
   }
@@ -92,7 +93,7 @@ resource "aws_instance" "jenkins_master" {
       "mkdir -p ${local.jenkins_home}/init.groovy.d",
       "mv /tmp/*.groovy ${local.jenkins_home}/init.groovy.d/",
       "sudo chown -R ubuntu:ubuntu ${local.jenkins_home}",
-      "sleep 60",
+//      "sleep 60",
       "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
     ]
   }
