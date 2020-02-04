@@ -12,7 +12,23 @@ node('agent-node-label') {
 
   }
   stage('Run Tests') {
-    sh "docker run --rm -d ${customImage.id}"
+      sh '''
+          docker run --rm -d -p 5000:5000 --name test ${customImage.id}
+          while true; do
+            http_hb=$(curl -s -o /dev/null -w "%{http_code}" 'http://localhost:8000')
+            if [ $http_hb -eq 200 ]; then
+              exit 0
+              break
+            elif [ sleep -lt 60 ]; then
+              sleep=$((sleep+1))
+              continue
+            else
+              exit 1
+              docker stop ${customImage.id}
+              break
+            fi
+            done
+      '''
   }
   stage('Push to Docker Hub') { // Run the built image
     withDockerRegistry(credentialsId: 'dockerhub.pincher95',url: 'https://index.docker.io/v1/') {
