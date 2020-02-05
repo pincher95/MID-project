@@ -24,7 +24,6 @@ node('agent-node-label') {
               continue
             else
               exit 1
-              docker stop ${customImage.id}
               break
             fi
             done
