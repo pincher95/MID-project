@@ -19,7 +19,7 @@ node('agent-node-label') {
             if [ $http_hb -eq 200 ]; then
               exit 0
               break
-            elif [ sleep -lt 60 ]; then
+            elif [ $sleep -lt 60 ]; then
               sleep=$((sleep+1))
               continue
             else
