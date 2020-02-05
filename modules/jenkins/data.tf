@@ -69,3 +69,4 @@ data "template_file" "jenkins_configure_jenkins_credentials" {
     jenkins_admin_password = local.jenkins_password
   }
 }
+
