@@ -10,16 +10,16 @@ resource "aws_instance" "jenkins_agent" {
   connection {
     host = self.private_ip
     user = "ec2-user"
-    private_key = file(var.private_key_path)
+    private_key = file(var.private_key)
 
     bastion_host = var.bastion_ip[0]
     bastion_user = "ubuntu"
   }
 
-  provisioner "file" {
-    source = "./kubeconfig"
-    destination = "/home/ec2-user"
-  }
+//  provisioner "file" {
+//    source = "./kubeconfig"
+//    destination = "/home/ec2-user"
+//  }
 
   provisioner "remote-exec" {
     inline = [

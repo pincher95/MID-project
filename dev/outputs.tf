@@ -9,3 +9,4 @@ output "jenkins_ip" {
 output "jenkin_agent_ip" {
   value = module.jenkins.jenkins_agent_ip
 }
+

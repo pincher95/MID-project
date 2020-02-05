@@ -38,22 +38,15 @@ module "bastion" {
   public_subnet = module.vpc.public_subnet
 }
 
-resource "null_resource" "key_trigger" {
-  depends_on = [module.key_pair.aws_key_name]
-  triggers = {
-    trigger = ""
-  }
-}
 module "jenkins" {
-  module_depends_on = [module.key_pair]
   source = "../modules/jenkins"
   jenkis_ec2_type = var.ec2_type
   jenkis_sg = module.vpc.jenkins_sg
   private_sg = module.vpc.private_sg
   private_key = var.project_key_path
   public_key = var.project_public_path
+  private_key_pem = module.key_pair.project_private_key
   bastion_ip = module.bastion.bastion_public_ip
-  private_key_path = var.project_key_path
   public_aws_key = module.key_pair.aws_key_name
   private_subnet = module.vpc.privare_subnet
   namespace = var.namespace
@@ -74,7 +67,7 @@ module "jenkins" {
 //  worker_node_type = var.ec2_type
 //  worker_sg = module.vpc.worker_sg
 //}
-//
+
 module "consul" {
   source = "../modules/consul"
   availability_zone = ""

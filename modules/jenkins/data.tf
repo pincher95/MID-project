@@ -56,10 +56,9 @@ data "template_file" "pipeline_init" {
 data "template_file" "jenkins_configure_ssh" {
   template = file("../templates/ssh_credentials.groovy.tpl")
   vars = {
-    jenkins_ssh_key = file(var.private_key_path)
+    jenkins_ssh_key = var.private_key_pem
     jenkins_slave_name = "ec2-user"
   }
-  depends_on = [var.module_depends_on]
 }
 
 data "template_file" "jenkins_configure_jenkins_credentials" {

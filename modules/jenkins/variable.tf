@@ -8,15 +8,13 @@ variable "private_key" {}
 
 variable "public_key" {}
 
-variable "bastion_ip" {}
+variable "private_key_pem" {}
 
-variable "private_key_path" {}
+variable "bastion_ip" {}
 
 variable "public_aws_key" {}
 
 variable "private_subnet" {}
-
-variable "module_depends_on" {}
 
 variable "namespace" {}
 
