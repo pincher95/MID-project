@@ -38,6 +38,12 @@ module "bastion" {
   public_subnet = module.vpc.public_subnet
 }
 
+resource "null_resource" "key_trigger" {
+  depends_on = [module.key_pair.aws_key_name]
+  triggers = {
+    trigger = ""
+  }
+}
 module "jenkins" {
   module_depends_on = [module.key_pair]
   source = "../modules/jenkins"
@@ -57,18 +63,18 @@ module "jenkins" {
   consul_client_sg = module.vpc.consul_client_sg
 }
 
-module "k8s" {
-  source = "../modules/k8s"
-  private_subnet_id = module.vpc.privare_subnet
-  public_subnet_id = module.vpc.public_subnet
-  env = var.environment
-  tags = ""
-  vpc_id = module.vpc.vpc_id
-  worker_group_name = ""
-  worker_node_type = var.ec2_type
-  worker_sg = module.vpc.worker_sg
-}
-
+//module "k8s" {
+//  source = "../modules/k8s"
+//  private_subnet_id = module.vpc.privare_subnet
+//  public_subnet_id = module.vpc.public_subnet
+//  env = var.environment
+//  tags = ""
+//  vpc_id = module.vpc.vpc_id
+//  worker_group_name = ""
+//  worker_node_type = var.ec2_type
+//  worker_sg = module.vpc.worker_sg
+//}
+//
 module "consul" {
   source = "../modules/consul"
   availability_zone = ""

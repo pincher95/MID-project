@@ -14,6 +14,12 @@ locals {
   msg = "installing plugins"
 }
 
+//resource "null_resource" "key_trigger" {
+//  triggers = {
+//    key_trigger = var.module_depends_on
+//  }
+//}
+
 resource "aws_instance" "jenkins_master" {
   ami = "ami-07d0cf3af28718ef8"
   instance_type = var.jenkis_ec2_type
@@ -22,7 +28,7 @@ resource "aws_instance" "jenkins_master" {
   vpc_security_group_ids = [var.jenkis_sg, var.private_sg, var.consul_client_sg]
   iam_instance_profile = var.instance_profile
   user_data = data.template_cloudinit_config.consul_client[0].rendered
-  depends_on = [var.module_depends_on]
+//  depends_on = [null_resource.key_trigger]
 
   connection {
     host = self.private_ip

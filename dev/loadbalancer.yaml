@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: foaas-service
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: LoadBalancer
 spec:
   type: LoadBalancer
   selector:
-    app: nginx
+    app: foaas
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 5000
