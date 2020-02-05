@@ -41,7 +41,7 @@ module "bastion" {
 resource "null_resource" "key_trigger" {
   depends_on = [module.key_pair.aws_key_name]
   triggers = {
-    trigger =
+    trigger = ""
   }
 }
 module "jenkins" {
