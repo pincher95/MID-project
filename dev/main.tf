@@ -38,23 +38,23 @@ module "bastion" {
   public_subnet = module.vpc.public_subnet
 }
 
-module "jenkins" {
-  source = "../modules/jenkins"
-  jenkis_ec2_type = var.ec2_type
-  jenkis_sg = module.vpc.jenkins_sg
-  private_sg = module.vpc.private_sg
-  private_key = var.project_key_path
-  public_key = var.project_public_path
-  private_key_pem = module.key_pair.project_private_key
-  bastion_ip = module.bastion.bastion_public_ip
-  public_aws_key = module.key_pair.aws_key_name
-  private_subnet = module.vpc.privare_subnet
-  namespace = var.namespace
-  consul_join_tag_key = var.consul_join_tag_key
-  consul_join_tag_value = var.consul_join_tag_value
-  instance_profile = module.consul.instance_profile
-  consul_client_sg = module.vpc.consul_client_sg
-}
+//module "jenkins" {
+//  source = "../modules/jenkins"
+//  jenkis_ec2_type = var.ec2_type
+//  jenkis_sg = module.vpc.jenkins_sg
+//  private_sg = module.vpc.private_sg
+//  private_key = var.project_key_path
+//  public_key = var.project_public_path
+//  private_key_pem = module.key_pair.project_private_key
+//  bastion_ip = module.bastion.bastion_public_ip
+//  public_aws_key = module.key_pair.aws_key_name
+//  private_subnet = module.vpc.privare_subnet
+//  namespace = var.namespace
+//  consul_join_tag_key = var.consul_join_tag_key
+//  consul_join_tag_value = var.consul_join_tag_value
+//  instance_profile = module.consul.instance_profile
+//  consul_client_sg = module.vpc.consul_client_sg
+//}
 
 module "k8s" {
   source = "../modules/k8s"
@@ -68,15 +68,15 @@ module "k8s" {
   worker_sg = module.vpc.worker_sg
 }
 
-module "consul" {
-  source = "../modules/consul"
-  availability_zone = ""
-  private_subnet_id = module.vpc.privare_subnet
-  consul_join_tag_key = var.consul_join_tag_key
-  consul_join_tag_value = var.consul_join_tag_value
-  consul_server_count = var.consul_servers
-  ec2_type = var.ec2_type
-  namespace = var.namespace
-  public_aws_key = module.key_pair.aws_key_name
-  consul_sg = module.vpc.consul_sg
-}
+//module "consul" {
+//  source = "../modules/consul"
+//  availability_zone = ""
+//  private_subnet_id = module.vpc.privare_subnet
+//  consul_join_tag_key = var.consul_join_tag_key
+//  consul_join_tag_value = var.consul_join_tag_value
+//  consul_server_count = var.consul_servers
+//  ec2_type = var.ec2_type
+//  namespace = var.namespace
+//  public_aws_key = module.key_pair.aws_key_name
+//  consul_sg = module.vpc.consul_sg
+//}

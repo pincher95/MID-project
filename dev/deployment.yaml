@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: foaas-deployment
+  name: foaas
   labels:
     app: foaas
 spec:
@@ -23,9 +23,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: foaas-service
+  name: foaas
 spec:
+  type: ClusterIP
   selector:
     app: foaas
   ports:
     - port: 80 # Default port for image
+      targetPort: 5000
