@@ -19,3 +19,13 @@ spec:
         image: pincher95/foaas:3
         ports:
         - containerPort: 5000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: foaas-service
+spec:
+  selector:
+    app: foaas
+  ports:
+    - port: 80 # Default port for image
