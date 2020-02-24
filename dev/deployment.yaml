@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: foaas
-        image: pincher95/foaas:3
+        image: pincher95/foaas:2
         ports:
         - containerPort: 5000
 ---
