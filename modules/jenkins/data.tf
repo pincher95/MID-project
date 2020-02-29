@@ -23,12 +23,12 @@ data "template_cloudinit_config" "consul_client" {
   }
 }
 
-data "template_file" "create_permanent_agent" {
-  template = file("../templates/create_permanent_agent.groovy.tpl")
-  vars = {
-    jenkins_agent_ip = aws_instance.jenkins_agent.private_ip
-  }
-}
+//data "template_file" "create_permanent_agent" {
+//  template = file("../templates/create_permanent_agent.groovy.tpl")
+//  vars = {
+//    jenkins_agent_ip = aws_instance.jenkins_agent.private_ip
+//  }
+//}
 
 data "template_file" "jenkins_configure_dockerhub_credentials" {
   template = file("../templates/dockerhub_credentials.groovy.tpl")

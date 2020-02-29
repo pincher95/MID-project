@@ -39,17 +39,35 @@ module "eks" {
 
   # TODO Worker group 1
   # One Subnet
-  worker_groups = [
+//  worker_groups = [
+//    {
+//      name                          = "worker-group-1"
+//      instance_type                 = var.worker_node_type
+//      additional_userdata           = "echo foo bar"
+//      asg_desired_capacity          = 3
+//      asg_min_size                  = 3
+//      asg_max_size                  = 6
+//      subnets = var.private_subnet_id
+//      additional_security_group_ids = [var.worker_sg]
+//    }
+//  ]
+  worker_groups_launch_template = [
     {
-      name                          = "worker-group-1"
-      instance_type                 = var.worker_node_type
-      additional_userdata           = "echo foo bar"
-      asg_desired_capacity          = 2
-      subnets = var.private_subnet_id
-      additional_security_group_ids = [var.worker_sg]
-    }
-
+      instance_type                            = var.worker_node_type
+      additional_userdata                      = "echo foo bar"
+      subnets                                  = var.private_subnet_id
+      additional_security_group_ids            = [var.worker_sg]
+      asg_desired_capacity                     = 3
+      asg_min_size                             = 3
+      asg_max_size                             = 6
+      root_encrypted                           = ""
+    },
   ]
+
+//  worker_group_launch_template_count = 1
+  workers_group_defaults = {
+    key_name = var.aws_key[0]
+  }
   write_kubeconfig = true
   config_output_path = "./kubeconfig"
 }

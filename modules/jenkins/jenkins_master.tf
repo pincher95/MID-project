@@ -1,6 +1,6 @@
 locals {
   jenkins_default_name = "jenkins"
-  jenkins_home = "/home/ubuntu/jenkins_home"
+  jenkins_home = "/home/jenkins/jenkins_home"
   jenkins_home_mount = "${local.jenkins_home}:/var/jenkins_home"
   docker_sock_mount = "/var/run/docker.sock:/var/run/docker.sock"
   groovy_scripts_mount = "/tmp/init.groovy.d:/tmp/init.groovy.d"
@@ -57,10 +57,10 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/pipeline_init.groovy"
   }
 
-  provisioner "file" {
-    content     = data.template_file.create_permanent_agent.rendered
-    destination = "/tmp/create_permanent_agent.groovy"
-  }
+//  provisioner "file" {
+//    content     = data.template_file.create_permanent_agent.rendered
+//    destination = "/tmp/create_permanent_agent.groovy"
+//  }
 
   provisioner "file" {
     content     = data.template_file.jenkins_configure_ssh.rendered
@@ -77,7 +77,7 @@ resource "aws_instance" "jenkins_master" {
     command = <<-EOT
         ssh-add ${var.private_key};
         export ANSIBLE_HOST_KEY_CHECKING=False;
-        sleep 60;
+        sleep 10;
         ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
       EOT
   }
@@ -89,11 +89,16 @@ resource "aws_instance" "jenkins_master" {
 //      "sudo systemctl start docker",
 //      "sudo systemctl enable docker",
 //      "sudo usermod -aG docker ubuntu",
-      "mkdir -p ${local.jenkins_home}/init.groovy.d",
-      "mv /tmp/*.groovy ${local.jenkins_home}/init.groovy.d/",
-      "sudo chown -R ubuntu:ubuntu ${local.jenkins_home}",
+      "sudo apt install nfs-kernel-server -y",
+      "sudo systemctl enable --now nfs-server",
+      "sudo useradd -m -s /bin/nologin jenkins",
+      "sudo mkdir -p ${local.jenkins_home}/init.groovy.d",
+      "sudo mv /tmp/*.groovy ${local.jenkins_home}/init.groovy.d/",
+      "sudo chown -R jenkins:jenkins ${local.jenkins_home}",
+      "echo '${local.jenkins_home} *(rw,sync,no_subtree_check)' | sudo tee -a /etc/exports",
+      "sudo exportfs -ar"
 //      "sleep 60",
-      "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
+//      "sudo docker run -d -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
     ]
   }
 

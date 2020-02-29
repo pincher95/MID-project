@@ -13,3 +13,5 @@ variable "worker_group_name" {}
 variable "env" {}
 
 variable "worker_sg" {}
+
+variable "aws_key" {}

@@ -9,7 +9,7 @@ variable "aws_region" {
 }
 
 variable "availability_zone" {
-  default = ["us-east-1a", "us-east-1b"]
+  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 variable vpc_id {
@@ -63,7 +63,9 @@ variable "key_pair_names" {
 
 #----------k8s Variables---------------
 
-
+variable "worker_type" {
+  default = "t2.medium"
+}
 
 #----------Jenkins Variables------------
 variable "default_locals" {
