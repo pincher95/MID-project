@@ -1,4 +1,4 @@
-node('agent-node-label') {
+node('agent-node') {
 
   def DockerImage = "foaas:v1.0"
   def customImage = null
