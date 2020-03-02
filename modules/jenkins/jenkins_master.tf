@@ -47,10 +47,10 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/dockerhub_credentials.groovy"
   }
 
-  provisioner "file" {
-    content     = data.template_file.install_plugins.rendered
-    destination = "/tmp/install_plugins.groovy"
-  }
+//  provisioner "file" {
+//    content     = data.template_file.install_plugins.rendered
+//    destination = "/tmp/install_plugins.groovy"
+//  }
 
   provisioner "file" {
     content     = data.template_file.pipeline_init.rendered

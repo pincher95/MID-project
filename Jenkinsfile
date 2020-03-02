@@ -35,6 +35,6 @@ node('agent-node') {
     }
   }
   stage('Deploy to K8s') { // Run tests on container
-    kubernetesDeploy(configs: 'k8s/*', kubeconfigId: 'c67ba43e-0d15-4225-8fd1-8aed0fa10659', textCredentials: [serverUrl: 'https://'])
+    kubernetesdeploy(configs: 'k8s/*', kubeconfigid: 'kubeconfig', textCredentials: [serverUrl: 'https://'])
   }
 }

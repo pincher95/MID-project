@@ -38,12 +38,12 @@ data "template_file" "jenkins_configure_dockerhub_credentials" {
   }
 }
 
-data "template_file" "install_plugins" {
-  template = file("../templates/install_plugins.groovy.tpl")
-  vars = {
-    msg = local.msg
-  }
-}
+//data "template_file" "install_plugins" {
+//  template = file("../templates/install_plugins.groovy.tpl")
+//  vars = {
+//    msg = local.msg
+//  }
+//}
 
 data "template_file" "pipeline_init" {
   template = file("../templates/pipeline_init.groovy.tpl")

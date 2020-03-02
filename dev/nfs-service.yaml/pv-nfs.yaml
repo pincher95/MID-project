@@ -11,5 +11,5 @@ spec:
   accessModes:
     - ReadWriteMany
   nfs:
-    server: 10.0.6.146
+    server: 10.0.7.34
     path: "/home/jenkins/jenkins_home"
