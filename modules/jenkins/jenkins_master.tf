@@ -72,15 +72,15 @@ resource "aws_instance" "jenkins_master" {
     destination = "/tmp/setup_users.groovy"
   }
 
-  provisioner "local-exec" {
-    working_dir = "../ansible"
-    command = <<-EOT
-        ssh-add ${var.private_key};
-        export ANSIBLE_HOST_KEY_CHECKING=False;
-        sleep 10;
-        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
-      EOT
-  }
+//  provisioner "local-exec" {
+//    working_dir = "../ansible"
+//    command = <<-EOT
+//        ssh-add ${var.private_key};
+//        export ANSIBLE_HOST_KEY_CHECKING=False;
+//        sleep 10;
+//        ansible-playbook -i ${aws_instance.jenkins_master.private_ip}, jenkins_master.yml --extra-vars "docker_users=ubuntu"
+//      EOT
+//  }
 
   provisioner "remote-exec" {
     inline = [
