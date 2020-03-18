@@ -7,3 +7,4 @@ CMD [ "start" ]
 RUN apk update && apk add nodejs npm
 COPY foaas/ /src
 RUN npm install
+RUN whoami

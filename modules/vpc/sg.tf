@@ -196,14 +196,6 @@ resource "aws_security_group" "opsschool_client" {
   //  }
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow ssh from the world"
-  }
-
-  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -229,5 +221,49 @@ resource "aws_security_group" "opsschool_client" {
 
   tags = {
     Name = "Consul Client SG"
+  }
+}
+
+resource "aws_security_group" "MySql-SG" {
+  name = "MySQL_SG"
+  description = "Allow Access to MySQL"
+  vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "TCP"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "MySQL"
+  }
+
+  tags = {
+    Name = "MySQL Server SG"
+  }
+}
+
+resource "aws_security_group" "global_sg" {
+  name = "global_sg"
+  description = "Global inbound and outbound SG"
+  vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow inbound ssh"
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    description     = "Allow all outbound traffic"
+  }
+
+  tags = {
+    Name = "Global inbound and out bound SG rules"
   }
 }

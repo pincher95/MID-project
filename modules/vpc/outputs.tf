@@ -36,3 +36,7 @@ output "consul_client_sg" {
 output "private_subnet_ern" {
   value = aws_subnet.private.*.arn
 }
+
+output "mysql_sg" {
+  value = aws_security_group.MySql-SG.id
+}
