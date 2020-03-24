@@ -10,8 +10,10 @@ variable "consul_join_tag_key" {}
 
 variable "consul_join_tag_value" {}
 
-variable "public_aws_key" {}
+variable "bootstrap_key" {}
 
 variable "consul_sg" {}
+
+variable "global_sg" {}
 
 variable "private_subnet_id" {}

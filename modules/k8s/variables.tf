@@ -14,4 +14,4 @@ variable "env" {}
 
 variable "worker_sg" {}
 
-variable "aws_key" {}
+variable "bootstrap_key" {}

@@ -1,4 +1,4 @@
-output "aws_key_name" {
+output "bootstrap_key" {
   value = aws_key_pair.server_key.*.id
 }
 

@@ -66,7 +66,7 @@ module "eks" {
 
 //  worker_group_launch_template_count = 1
   workers_group_defaults = {
-    key_name = var.aws_key[0]
+    key_name = var.bootstrap_key[0]
   }
   write_kubeconfig = true
   config_output_path = "./kubeconfig"

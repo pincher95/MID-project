@@ -18,8 +18,8 @@ resource "aws_instance" "jenkins_master" {
   ami = "ami-07d0cf3af28718ef8"
   instance_type = var.jenkis_ec2_type
   subnet_id = var.private_subnet[0]
-  key_name = var.public_aws_key[0]
-  vpc_security_group_ids = [var.jenkis_sg, var.private_sg, var.consul_client_sg]
+  key_name = var.bootstrap_key[0]
+  vpc_security_group_ids = [var.jenkis_sg, var.global_sg, var.consul_sg]
   iam_instance_profile = var.instance_profile
   user_data = data.template_cloudinit_config.consul_client[0].rendered
 

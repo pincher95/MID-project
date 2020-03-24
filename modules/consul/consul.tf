@@ -37,8 +37,8 @@ resource "aws_instance" "consule-server" {
   subnet_id         = var.private_subnet_id[count.index]
   ami               = data.aws_ami.ubuntu.id
   instance_type     = var.ec2_type
-  vpc_security_group_ids = [var.consul_sg]
-  key_name               = var.public_aws_key[0]
+  vpc_security_group_ids = [var.consul_sg, var.global_sg]
+  key_name               = var.bootstrap_key[0]
   iam_instance_profile = aws_iam_instance_profile.consul-join.name
   user_data = element(data.template_file.server.*.rendered, count.index)
   tags = map("Name", "${var.namespace}-server-${count.index}", var.consul_join_tag_key, var.consul_join_tag_value)

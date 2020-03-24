@@ -19,8 +19,8 @@ resource "aws_instance" "bastion" {
   subnet_id = element(var.public_subnet, count.index)
   ami = data.aws_ami.ubuntu.id
   instance_type = var.ec2_type
-  vpc_security_group_ids = [var.public_sg]
-  key_name = var.public_aws_key[0]
+  vpc_security_group_ids = [var.global_sg]
+  key_name = var.bootstrap_key[0]
 
   connection {
     type = "ssh"
@@ -41,7 +41,7 @@ resource "aws_instance" "bastion" {
   }
 
   tags = {
-    Name = "Bastion_Server"
+    Name = "Bastion Server"
   }
 }
 

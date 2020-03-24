@@ -1,6 +1,6 @@
 variable "private_key_path" {}
 
-variable "public_sg" {}
+variable "global_sg" {}
 
 variable "ec2_type" {}
 
@@ -10,4 +10,4 @@ variable "availability_zone" {}
 
 variable "public_ec2_count" {}
 
-variable "public_aws_key" {}
+variable "bootstrap_key" {}
