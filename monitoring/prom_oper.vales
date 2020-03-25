@@ -1,0 +1,13 @@
+grafana:
+  adminUser: admin
+  adminPassword: admin
+  service: 
+    type: NodePort
+
+prometheus:
+  service:
+    type: NodePort
+
+
+prometheusOperator:
+  createCustomResource: false
