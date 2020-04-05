@@ -94,7 +94,7 @@ resource "aws_instance" "jenkins_master" {
       "sudo useradd -m -s /bin/nologin jenkins",
       "sudo mkdir -p ${local.jenkins_home}/init.groovy.d",
       "sudo mv /tmp/*.groovy ${local.jenkins_home}/init.groovy.d/",
-      "sudo chown -R jenkins:jenkins ${local.jenkins_home}",
+      "sudo chown nobody:nogroup ${local.jenkins_home}",
       "echo '${local.jenkins_home} *(rw,sync,no_subtree_check)' | sudo tee -a /etc/exports",
       "sudo exportfs -ar"
 //      "sleep 60",

@@ -7,6 +7,10 @@ provider "aws" {
   region  = var.aws_region
 }
 
+provider "tls" {
+  version = "~> 2.1"
+}
+
 terraform {
   backend "s3" {
     bucket = "s3-backend-state"
@@ -55,6 +59,17 @@ module "bastion" {
 //  consul_join_tag_key   = var.consul_join_tag_key
 //  consul_join_tag_value = var.consul_join_tag_value
 //  instance_profile      = module.consul.instance_profile
+//}
+
+//module "nfs" {
+//  source          = "../modules/nfs"
+//  ec2_type        = var.ec2_type
+//  global_sg       = module.vpc.global_sg
+//  consul_sg       = module.vpc.consul_sg
+//  private_key     = var.project_key_path
+//  bastion_ip      = module.bastion.bastion_public_ip
+//  bootstrap_key   = module.key_pair.bootstrap_key
+//  private_subnet  = module.vpc.privare_subnet
 //}
 
 module "k8s" {

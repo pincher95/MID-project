@@ -8,3 +8,4 @@
 /ansible/novafloss.jenkins-node/
 /dev/.terraform/
 /dev/.terraform/plugins/linux_amd64/
+/elastic-stack/

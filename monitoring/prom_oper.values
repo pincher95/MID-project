@@ -3,12 +3,14 @@ grafana:
   adminPassword: admin
   service: 
     type: NodePort
-    nodePort: 31080
+    nodePort: "31080"
 
 prometheus:
   service:
     type: NodePort
 
+alertmanager:
+  enabled: false
 
 prometheusOperator:
   createCustomResource: false

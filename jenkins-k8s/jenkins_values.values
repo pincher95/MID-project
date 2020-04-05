@@ -1,4 +1,8 @@
 master:
+  authorizationStrategy: |-
+     <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy">
+       <denyAnonymousReadAccess>false</denyAnonymousReadAccess>
+     </authorizationStrategy>
   adminPassword: admin
   resources:
     limits:
@@ -6,9 +10,8 @@ master:
       memory: "1096Mi"
   #javaOpts: "-Djavamelody.plugin-authentication-disabled=true"
   serviceType: NodePort
-
   nodePort: 32323
-
+  podLabels: { consul.hashicorp.com/service-tags: jenkins }
   installPlugins:
     - kubernetes:1.24.1
     - kubernetes-cd:2.1.2
@@ -24,7 +27,6 @@ master:
     - rebuild:1.31
     - ssh-agent:1.17
     - prometheus:2.0.6
-    - metrics:4.0.2.6
 
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   overwritePlugins: true
@@ -34,8 +36,8 @@ master:
     serviceMonitorNamespace: monitoring
     scrapeEndpoint: /prometheus
     serviceMonitorAdditionalLabels: {
-    app: jenkins,
-    release: prometheus-operator }
+    app: jenkins }
+#    release: prometheus-operator }
 
 agent:
   enabled: false
