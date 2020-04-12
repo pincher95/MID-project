@@ -72,29 +72,38 @@ resource "helm_release" "kibana" {
   depends_on = [helm_release.elasticsearch]
 }
 
-resource "helm_release" "elastic-stack" {
-  chart = "elastic-stack"
-  repository = "./charts"
-  name = "elastic-stack"
-  version = "1.9.0"
+resource "helm_release" "logstash" {
+  chart = "logstash"
+  repository = data.helm_repository.stable.metadata[0].name
+  name = "logstash"
+  version = "2.4.0"
   namespace = "kube-logging"
   values = [
-    file("./charts/values-store/elk-values.yaml")
+    file("./charts/values-store/logstash-values.yaml")
   ]
   depends_on = [helm_release.kibana]
 }
 
-
-
-
-resource "helm_release" "jenkins" {
-  chart = "jenkins"
-  repository = "./charts"
-  name = "jenkins"
-  version = "1.11.3"
-  namespace = "kube-jenkins"
+resource "helm_release" "filebeat" {
+  chart = "filebeat"
+  repository = data.helm_repository.stable.metadata[0].name
+  name = "filebeat"
+  version = "4.0.0"
+  namespace = "kube-logging"
   values = [
-    file("./charts/values-store/jenkins-values.yaml")
+    file("./charts/values-store/filebeat-values.yaml")
   ]
-  depends_on = [helm_release.elastic-stack]
+  depends_on = [helm_release.logstash]
 }
+
+//resource "helm_release" "jenkins" {
+//  chart = "jenkins"
+//  repository = "./charts"
+//  name = "jenkins"
+//  version = "1.11.3"
+//  namespace = "kube-jenkins"
+//  values = [
+//    file("./charts/values-store/jenkins-values.yaml")
+//  ]
+//  depends_on = [helm_release.kibana]
+//}

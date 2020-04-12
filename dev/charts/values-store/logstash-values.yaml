@@ -1,0 +1,35 @@
+service:
+  annotations:
+    consul.hashicorp.com/service-tags: logstash-metrics
+
+exporter:
+  logstash:
+    enabled: true
+
+elasticsearch:
+  host: elasticsearch.service.consul
+  port: 9200
+
+files:
+   logstash-template.json: |-
+     {
+       "order": 0,
+       "version": 1,
+       "index_patterns": [
+         "logstash-*"
+       ],
+       "settings": {
+         "index": {
+           "refresh_interval": "5s"
+         }
+       },
+       "mappings": {
+         "doc": {
+           "_meta": {
+             "version": "1.0.0"
+           },
+           "enabled": false
+         }
+       },
+       "aliases": {}
+     }

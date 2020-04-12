@@ -18,3 +18,4 @@
 /elk-k8s/
 /monitoring/
 /prometheus-k8s/
+/added_mysql.patch
