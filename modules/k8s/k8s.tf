@@ -57,8 +57,8 @@ module "eks" {
       additional_userdata                      = "echo foo bar"
       subnets                                  = var.private_subnet_id
       additional_security_group_ids            = [var.worker_sg]
-      asg_desired_capacity                     = 3
-      asg_min_size                             = 3
+      asg_desired_capacity                     = 6
+      asg_min_size                             = 6
       asg_max_size                             = 6
       root_encrypted                           = ""
     },
@@ -72,3 +72,10 @@ module "eks" {
   config_output_path = "./kubeconfig"
 }
 
+resource "kubernetes_namespace" "kube-namespaces" {
+  count = length(var.namespaces)
+  metadata {
+    name = var.namespaces[count.index]
+  }
+  depends_on = [module.eks]
+}

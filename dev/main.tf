@@ -11,6 +11,13 @@ provider "tls" {
   version = "~> 2.1"
 }
 
+provider "helm" {
+  version = "~>1.1"
+  kubernetes {
+    config_path = "./kubeconfig"
+  }
+}
+
 terraform {
   backend "s3" {
     bucket = "s3-backend-state"
@@ -41,6 +48,10 @@ module "bastion" {
   public_ec2_count  = var.public_ec2_count
   global_sg         = module.vpc.global_sg
   public_subnet     = module.vpc.public_subnet
+}
+
+module "helm" {
+  source = "../modules/helm"
 }
 
 //module "jenkins" {
@@ -83,6 +94,7 @@ module "k8s" {
   worker_node_type = var.worker_type
   worker_sg = module.vpc.worker_sg
   bootstrap_key = module.key_pair.bootstrap_key
+  namespaces = var.namespaces
 }
 
 //module "consul" {

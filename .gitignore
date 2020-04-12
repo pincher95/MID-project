@@ -9,3 +9,12 @@
 /dev/.terraform/
 /dev/.terraform/plugins/linux_amd64/
 /elastic-stack/
+/helm/
+/elk-k8s/test/
+/elk-k8s/
+/jenkins-k8s/
+/dev/charts/elasticsearch/
+/dev/charts/kibana/
+/elk-k8s/
+/monitoring/
+/prometheus-k8s/

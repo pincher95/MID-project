@@ -15,3 +15,6 @@ variable "env" {}
 variable "worker_sg" {}
 
 variable "bootstrap_key" {}
+
+variable "namespaces" {
+}

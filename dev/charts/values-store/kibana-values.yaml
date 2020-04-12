@@ -1,0 +1,15 @@
+service:
+  type: NodePort
+  nodePort: 30056
+  annotations: {}
+
+metrics:
+  enabled: true
+  service:
+    annotations:
+      consul.hashicorp.com/service-tags: kibana-metrics
+
+elasticsearch:
+  hosts:
+    - elasticsearch.service.consul
+  port: 9200

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana-logging
-  namespace: kube-system
+  namespace: kube-logging
   labels:
     k8s-app: kibana-logging
     kubernetes.io/cluster-service: "true"
@@ -21,8 +21,7 @@ spec:
     spec:
       containers:
         - name: kibana-logging
-          #image: docker.elastic.co/kibana/kibana-oss:6.7.0
-          image: docker.elastic.co/kibana/kibana:7.6.2
+          image: docker.elastic.co/kibana/kibana-oss:6.2.4
           resources:
             # need more cpu upon initialization, therefore burstable class
             limits:
@@ -31,7 +30,7 @@ spec:
               cpu: 100m
           env:
             - name: ELASTICSEARCH_URL
-              value: http://elasticsearch-logging:9200
+              value: http://elasticsearch-logging.service.consul:9200
           ports:
             - containerPort: 5601
               name: ui
@@ -41,7 +40,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kibana-logging
-  namespace: kube-system
+  namespace: kube-logging
   labels:
     k8s-app: kibana-logging
     kubernetes.io/cluster-service: "true"
@@ -53,6 +52,6 @@ spec:
       protocol: TCP
       targetPort: ui
       nodePort: 30056
-  type: NodePort
   selector:
     k8s-app: kibana-logging
+  type: NodePort

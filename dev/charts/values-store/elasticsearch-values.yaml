@@ -1,0 +1,59 @@
+master:
+  replicas: 1
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+coordinating:
+  replicas: 1
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+data:
+  replicas: 1
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+
+curator:
+  enabled: true
+
+metrics:
+  enabled: true
+  service:
+    annotations:
+      consul.hashicorp.com/service-tags: elasticsearch-metrics

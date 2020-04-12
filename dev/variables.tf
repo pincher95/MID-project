@@ -73,6 +73,10 @@ variable "worker_type" {
   default = "t2.medium"
 }
 
+variable "namespaces" {
+  type = list(string)
+  default = ["kube-consul", "kube-metrics", "kube-logging", "kube-jenkins", "kube-app"]
+}
 #----------Jenkins Variables------------
 variable "default_locals" {
   default = "true"

@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
+  name: filebeat-config
+  namespace: kube-logging
   labels:
     k8s-app: filebeat
     kubernetes.io/cluster-service: "true"
-  name: filebeat-config
-  namespace: kube-system
 data:
   filebeat.yml: |-
     filebeat.config:
@@ -21,6 +20,7 @@ data:
         reload.enabled: false
     processors:
       - add_cloud_metadata:
+
     cloud.id: ${ELASTIC_CLOUD_ID}
     cloud.auth: ${ELASTIC_CLOUD_AUTH}
 
@@ -30,12 +30,11 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
+  name: filebeat-prospectors
+  namespace: kube-logging
   labels:
     k8s-app: filebeat
     kubernetes.io/cluster-service: "true"
-  name: filebeat-prospectors
-  namespace: kube-system
 data:
   kubernetes.yml: |-
     - type: docker
@@ -45,35 +44,30 @@ data:
         - add_kubernetes_metadata:
             in_cluster: true
 ---
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  annotations:
-    deprecated.daemonset.template.generation: "0"
-  creationTimestamp: null
+  name: filebeat
+  namespace: kube-logging
   labels:
     k8s-app: filebeat
     kubernetes.io/cluster-service: "true"
-  name: filebeat
-  namespace: kube-system
 spec:
-  revisionHistoryLimit: 10
-  selector:
-    matchLabels:
-      k8s-app: filebeat
-      kubernetes.io/cluster-service: "true"
   template:
     metadata:
-      creationTimestamp: null
       labels:
         k8s-app: filebeat
         kubernetes.io/cluster-service: "true"
     spec:
+      serviceAccountName: filebeat
+      terminationGracePeriodSeconds: 30
       containers:
-        - args:
-            - -c
-            - /etc/filebeat.yml
-            - -e
+        - name: filebeat
+          image: docker.elastic.co/beats/filebeat:6.3.0
+          args: [
+            "-c", "/etc/filebeat.yml",
+            "-e",
+          ]
           env:
             - name: ELASTICSEARCH_HOST
               value: elasticsearch-logging
@@ -84,87 +78,66 @@ spec:
             - name: ELASTICSEARCH_PASSWORD
               value: changeme
             - name: ELASTIC_CLOUD_ID
+              value:
             - name: ELASTIC_CLOUD_AUTH
-          image: docker.elastic.co/beats/filebeat:6.3.0
-          imagePullPolicy: IfNotPresent
-          name: filebeat
+              value:
+          securityContext:
+            runAsUser: 0
           resources:
             limits:
               memory: 200Mi
             requests:
               cpu: 100m
               memory: 100Mi
-          securityContext:
-            runAsUser: 0
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
           volumeMounts:
-            - mountPath: /etc/filebeat.yml
-              name: config
+            - name: config
+              mountPath: /etc/filebeat.yml
               readOnly: true
               subPath: filebeat.yml
-            - mountPath: /usr/share/filebeat/prospectors.d
-              name: prospectors
+            - name: prospectors
+              mountPath: /usr/share/filebeat/prospectors.d
               readOnly: true
-            - mountPath: /usr/share/filebeat/data
-              name: data
-            - mountPath: /var/lib/docker/containers
-              name: varlibdockercontainers
+            - name: data
+              mountPath: /usr/share/filebeat/data
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
               readOnly: true
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      serviceAccount: filebeat
-      serviceAccountName: filebeat
-      terminationGracePeriodSeconds: 30
       volumes:
-        - configMap:
-            defaultMode: 384
+        - name: config
+          configMap:
+            defaultMode: 0600
             name: filebeat-config
-          name: config
-        - hostPath:
+        - name: varlibdockercontainers
+          hostPath:
             path: /var/lib/docker/containers
-            type: ""
-          name: varlibdockercontainers
-        - configMap:
-            defaultMode: 384
+        - name: prospectors
+          configMap:
+            defaultMode: 0600
             name: filebeat-prospectors
-          name: prospectors
-        - emptyDir: {}
-          name: data
-  updateStrategy:
-    type: OnDelete
-status:
-  currentNumberScheduled: 0
-  desiredNumberScheduled: 0
-  numberMisscheduled: 0
-  numberReady: 0
+        - name: data
+          emptyDir: {}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  creationTimestamp: null
-  name: filebeat
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: filebeat
 subjects:
   - kind: ServiceAccount
     name: filebeat
-    namespace: kube-system
+    namespace: kube-logging
+roleRef:
+  kind: ClusterRole
+  name: filebeat
+  apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
+  name: filebeat
   labels:
     k8s-app: filebeat
-  name: filebeat
 rules:
-  - apiGroups:
-      - ""
+  - apiGroups: [""] # "" indicates the core API group
     resources:
       - namespaces
       - pods
@@ -176,9 +149,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  creationTimestamp: null
+  name: filebeat
+  namespace: kube-logging
   labels:
     k8s-app: filebeat
-  name: filebeat
-  namespace: kube-system
----

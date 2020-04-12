@@ -4,8 +4,8 @@ global:
 
 server:
   # use 1 server
-  replicas: 1
-  bootstrapExpect: 1
+  replicas: 3
+  bootstrapExpect: 3
   disruptionBudget:
     enabled: true
     maxUnavailable: 0
@@ -13,12 +13,21 @@ server:
 client:
   enabled: true
   # enable grpc on your client to support consul consul connect
-  grpc: true
+  #grpc: true
+
+syncCatalog:
+  enabled: true
+  toConsul: true
+  toK8S: true
+
+dns:
+  enabled: true
 
 ui:
   enabled: true
   service:
-    type: NodePort
+    type: 'NodePort'
+    nodePort: 30085
 
 connectInject:
   enabled: true

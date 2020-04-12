@@ -28,7 +28,7 @@ data:
     }
     output {
         elasticsearch {
-            hosts => [ "elasticsearch-logging.service.consul:9200" ]
+            hosts => [ "elasticsearch.kube-logging.svc.cluster.local:9200" ]
         }
     }
 ---
@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: logstash
-          image: docker.elastic.co/logstash/logstash:6.2.4
+          image: docker.elastic.co/logstash/logstash:7.2.0
           ports:
             - containerPort: 5044
           volumeMounts:
