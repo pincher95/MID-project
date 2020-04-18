@@ -1,7 +1,3 @@
-terraform {
-  required_version = ">= 0.12.0"
-}
-
 variable "aws_region" {
   type = string
   description = "AWS region"

@@ -9,11 +9,13 @@ server:
   disruptionBudget:
     enabled: true
     maxUnavailable: 0
+  hostNetwork: false
 
 client:
   enabled: true
   # enable grpc on your client to support consul consul connect
-  #grpc: true
+  grpc: true
+  exposeGossipPorts: true
 
 syncCatalog:
   enabled: true
@@ -22,6 +24,7 @@ syncCatalog:
 
 dns:
   enabled: true
+  clusterIP: 172.20.4.180
 
 ui:
   enabled: true

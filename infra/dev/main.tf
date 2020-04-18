@@ -50,9 +50,10 @@ module "bastion" {
   public_subnet     = module.vpc.public_subnet
 }
 
-module "helm" {
-  source = "../modules/helm"
-}
+//module "helm" {
+//  source = "..\/moduless\/helm"
+//  delay = module.k8s.delay
+//}
 
 //module "jenkins" {
 //  source          = "../modules/jenkins"

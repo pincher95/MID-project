@@ -1,0 +1,46 @@
+adminPassword: admin
+persistence:
+  enabled: false
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server
+        access: proxy
+        isDefault: true
+service:
+  annotations: {
+    consul.hashicorp.com/service-tags: grafana-metrics
+  }
+  type: NodePort
+  nodePort: 31080
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+
+dashboards:
+  default:
+    kubernetes-cluster:
+      gnetId: 10000
+      datasource: Prometheus
+    jenkins-master:
+      gnetId: 9524
+      datasource: Prometheus
+    elasticsearch:
+      gnetId: 6483
+      datasource: Prometheus
+    grafan-internals:
+      gnetId: 3590
+      datasource: Prometheus

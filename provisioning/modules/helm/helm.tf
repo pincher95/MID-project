@@ -1,3 +1,12 @@
+//resource "null_resource" "delay" {
+//  provisioner "local-exec" {
+//    command = "sleep 10"
+//  }
+//  triggers = {
+//    delay = var.delay
+//  }
+//}
+
 data "helm_repository" "stable" {
   name = "stable"
   url = "https://kubernetes-charts.storage.googleapis.com"
@@ -22,6 +31,17 @@ resource "helm_release" "consul-helm" {
   values = [
     file("./charts/values-store/consul-values.yaml")
   ]
+//  depends_on = [null_resource.delay]
+}
+
+resource "null_resource" "coreDNS-custom" {
+  provisioner "local-exec" {
+    command = <<EOT
+      kubectl replace --kubeconfig ../kubeconfig -n kube-system -f coredns-custom.yaml
+      kubectl apply --kubeconfig ../kubeconfig -f servicemonitors.coreos.com.yaml
+    EOT
+  }
+  depends_on = [helm_release.consul-helm]
 }
 
 resource "helm_release" "prometheus" {
@@ -96,14 +116,14 @@ resource "helm_release" "filebeat" {
   depends_on = [helm_release.logstash]
 }
 
-//resource "helm_release" "jenkins" {
-//  chart = "jenkins"
-//  repository = "./charts"
-//  name = "jenkins"
-//  version = "1.11.3"
-//  namespace = "kube-jenkins"
-//  values = [
-//    file("./charts/values-store/jenkins-values.yaml")
-//  ]
-//  depends_on = [helm_release.kibana]
-//}
+resource "helm_release" "jenkins" {
+  chart = "jenkins"
+  repository = "./charts"
+  name = "jenkins"
+  version = "1.11.3"
+  namespace = "kube-jenkins"
+  values = [
+    file("./charts/values-store/jenkins-values.yaml")
+  ]
+  depends_on = [helm_release.filebeat]
+}

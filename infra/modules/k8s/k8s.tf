@@ -69,7 +69,7 @@ module "eks" {
     key_name = var.bootstrap_key[0]
   }
   write_kubeconfig = true
-  config_output_path = "./kubeconfig"
+  config_output_path = "../${path.root}/kubeconfig"
 }
 
 resource "kubernetes_namespace" "kube-namespaces" {

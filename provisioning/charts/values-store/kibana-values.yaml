@@ -1,0 +1,23 @@
+service:
+  type: NodePort
+  nodePort: 30056
+  annotations: {}
+
+metrics:
+  enabled: false
+  service:
+    annotations:
+      consul.hashicorp.com/service-tags: kibana-metrics
+  serviceMonitor:
+    enabled: false
+    namespace: kube-metrics
+    interval: 10s
+
+plugins:
+  - https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.8.0/enhanced-table-1.8.0_7.6.2.zip
+  - https://github.com/pjhampton/kibana-prometheus-exporter/releases/download/7.6.1/kibana-prometheus-exporter-7.6.1.zip
+
+elasticsearch:
+  hosts:
+    - elasticsearch.service.consul
+  port: 9200
