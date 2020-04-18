@@ -27,3 +27,4 @@
 /infra/modules/MySQL/
 /infra/modules/nfs/
 /ansible/
+/.circleci/
