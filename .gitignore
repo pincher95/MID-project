@@ -28,3 +28,7 @@
 /infra/modules/nfs/
 /ansible/
 /.circleci/
+/infra/modules/consul/
+/infra/modules/jenkins/
+/infra/modules/MySQL/
+/infra/modules/nfs/
