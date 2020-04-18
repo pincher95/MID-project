@@ -31,6 +31,56 @@ master:
     - ssh-agent:1.17
     - prometheus:2.0.6
 
+  initScripts:
+    pipeline_init: |-
+      import jenkins.model.Jenkins
+      import hudson.plugins.git.*;
+      def scm = new GitSCM("https://github.com/pincher95/crud-application-using-flask-and-mysql.git")
+      scm.branches = [new BranchSpec("*/master")];
+      def flowDefinition = new org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition(scm, "Jenkinsfile")
+      def parent = Jenkins.instance
+      def job = new org.jenkinsci.plugins.workflow.job.WorkflowJob(parent, "OpsSchool-Project")
+      job.definition = flowDefinition
+      Jenkins.get().add(job, job.name);
+    dockerCred: |-
+      import com.cloudbees.plugins.credentials.*
+      import com.cloudbees.plugins.credentials.domains.Domain
+      import com.cloudbees.plugins.credentials.impl.*
+      import hudson.util.Secret
+      import jenkins.model.Jenkins
+
+      // parameters
+      def jenkinsKeyUsernameWithPasswordParameters = [
+        description:  'Access to DockerHub (user: pincher95)',
+        id:           'dockerhub.pincher95',
+        secret:       'Yt304031800',
+        userName:     'pincher95'
+      ]
+
+      // get Jenkins instance
+      Jenkins jenkins = Jenkins.getInstance()
+
+      // get credentials domain
+      def domain = Domain.global()
+
+      // get credentials store
+      def store = jenkins.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
+
+      // define Bitbucket secret
+      def jenkinsKeyUsernameWithPassword = new UsernamePasswordCredentialsImpl(
+        CredentialsScope.GLOBAL,
+        jenkinsKeyUsernameWithPasswordParameters.id,
+        jenkinsKeyUsernameWithPasswordParameters.description,
+        jenkinsKeyUsernameWithPasswordParameters.userName,
+        jenkinsKeyUsernameWithPasswordParameters.secret
+      )
+
+      // add credential to store
+      store.addCredentials(domain, jenkinsKeyUsernameWithPassword)
+
+      // save to disk
+      jenkins.save()
+
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   overwritePlugins: true
 

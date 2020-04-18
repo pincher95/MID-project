@@ -28,3 +28,10 @@
 /not_in_project/ansible/
 /.circleci/
 /not_in_project/
+/.gitignore/
+/infra/Dockerfile
+/infra/Jenkins3
+/infra/Jenkinsfile
+/infra/Jenkinsfile2
+/infra/Jenkinsfile4
+/infra/Jenkinsfile5
