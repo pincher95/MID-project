@@ -1,0 +1,34 @@
+mysqlRootPassword: testing
+
+mysqlUser: admin
+mysqlPassword: admin
+
+
+## Create a database
+##
+# mysqlDatabase:
+
+persistence:
+  enabled: false
+
+
+# Custom mysql configuration files used to override default mysql settings
+configurationFiles: {}
+#  mysql.cnf: |-
+#    [mysqld]
+#    skip-name-resolve
+#    ssl-ca=/ssl/ca.pem
+#    ssl-cert=/ssl/server-cert.pem
+#    ssl-key=/ssl/server-key.pem
+
+# Custom mysql init SQL files used to initialize the database
+initializationFiles: {}
+#  first-db.sql: |-
+#    CREATE DATABASE IF NOT EXISTS first DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+#  second-db.sql: |-
+#    CREATE DATABASE IF NOT EXISTS second DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
+metrics:
+  enabled: true
+  annotations:
+    consul.hashicorp.com/service-tags: mysql-metrics
