@@ -26,3 +26,4 @@
 /infra/modules/consul/
 /infra/modules/MySQL/
 /infra/modules/nfs/
+/ansible/
