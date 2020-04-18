@@ -1,9 +1,0 @@
----
-# tasks file for docker
-- include: debian.yml
-  when: ansible_os_family == 'Debian'
-  tags: debian
-
-- include: redhat.yml
-  when: ansible_os_family == 'RedHat'
-  tags: redhat

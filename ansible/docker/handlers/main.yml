@@ -1,8 +1,0 @@
----
-# handlers file for docker
-- name: Start Docker
-  service: 
-    name: docker
-    state: started
-    enabled: yes
-  listen: "Start docker"
