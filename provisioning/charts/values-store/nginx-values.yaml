@@ -1,0 +1,19 @@
+controller:
+ autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+
+  service:
+    enabled: true
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    externalTrafficPolicy: Local
+
+  metrics:
+    enabled: true
+
+    service:
+      annotations:
+        consul.hashicorp.com/service-tags: nginx-metrics
+
