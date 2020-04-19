@@ -93,7 +93,7 @@ master:
 #    release: prometheus-operator }
 
 agent:
-  enabled: false
+  enabled: true
 
 persistence:
   enabled: true
