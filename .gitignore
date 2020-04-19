@@ -1,7 +1,7 @@
 /MID-project.iml
 /infra/modules/nlb/
 /infra/dev/templates/
-/infra/dev/loadbalancer.yaml
+/not_in_project/loadbalancer.yaml
 /not_in_project/ansible/container/
 /not_in_project/ansible/jenkins_master/
 /not_in_project/ansible/novafloss.jenkins-api/
@@ -29,9 +29,9 @@
 /.circleci/
 /not_in_project/
 /.gitignore/
-/infra/Dockerfile
-/infra/Jenkins3
-/infra/Jenkinsfile
-/infra/Jenkinsfile2
-/infra/Jenkinsfile4
-/infra/Jenkinsfile5
+/not_in_project/Dockerfile
+/not_in_project/Jenkins3
+/not_in_project/Jenkinsfile
+/not_in_project/Jenkinsfile2
+/not_in_project/Jenkinsfile4
+/not_in_project/Jenkinsfile5

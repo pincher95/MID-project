@@ -44,3 +44,6 @@ dashboards:
     grafan-internals:
       gnetId: 3590
       datasource: Prometheus
+    nginx-ingress:
+      gnetId: 9614
+      datasource: Prometheus

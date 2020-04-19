@@ -53,7 +53,7 @@ resource "helm_release" "prometheus" {
   values = [
     file("./charts/values-store/prometheus-values.yaml")
   ]
-  depends_on = [helm_release.consul-helm]
+  depends_on = [null_resource.coreDNS-custom]
 }
 
 resource "helm_release" "grafana" {
@@ -77,7 +77,7 @@ resource "helm_release" "elasticsearch" {
   values = [
     file("./charts/values-store/elasticsearch-values.yaml")
   ]
-  depends_on = [helm_release.grafana]
+  depends_on = [helm_release.consul-helm]
 }
 
 resource "helm_release" "kibana" {
@@ -101,7 +101,7 @@ resource "helm_release" "logstash" {
   values = [
     file("./charts/values-store/logstash-values.yaml")
   ]
-  depends_on = [helm_release.kibana]
+  depends_on = [helm_release.elasticsearch]
 }
 
 resource "helm_release" "filebeat" {
@@ -125,5 +125,18 @@ resource "helm_release" "jenkins" {
   values = [
     file("./charts/values-store/jenkins-values.yaml")
   ]
-  depends_on = [helm_release.filebeat]
+  depends_on = [null_resource.coreDNS-custom]
 }
+
+resource "helm_release" "nginx-ingress" {
+  chart = "nginx-ingress"
+  repository = data.helm_repository.stable.metadata[0].name
+  name = "nginx-ingress"
+  version = "1.36.2"
+  namespace = "nginx-ingress"
+  values = [
+    file("./charts/values-store/nginx-values.yaml")
+  ]
+  depends_on = [null_resource.coreDNS-custom]
+}
+

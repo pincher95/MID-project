@@ -71,7 +71,7 @@ variable "worker_type" {
 
 variable "namespaces" {
   type = list(string)
-  default = ["kube-consul", "kube-metrics", "kube-logging", "kube-jenkins", "kube-app"]
+  default = ["kube-consul", "kube-metrics", "kube-logging", "kube-jenkins", "kube-app", "nginx-ingress"]
 }
 #----------Jenkins Variables------------
 variable "default_locals" {
