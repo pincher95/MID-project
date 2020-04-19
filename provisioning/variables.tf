@@ -5,5 +5,6 @@ variable "aws_region" {
 }
 
 variable "dockerpass" {
-  default = Yt304031800
+  type = string
+  default = "Yt304031800"
 }
