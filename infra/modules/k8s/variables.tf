@@ -2,6 +2,8 @@ variable "private_subnet_id" {}
 
 variable "public_subnet_id" {}
 
+variable "global_sg" {}
+
 variable "tags" {}
 
 variable "vpc_id" {}
@@ -16,5 +18,4 @@ variable "worker_sg" {}
 
 variable "bootstrap_key" {}
 
-variable "namespaces" {
-}
+variable "namespaces" {}

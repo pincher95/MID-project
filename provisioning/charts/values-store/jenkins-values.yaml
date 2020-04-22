@@ -30,6 +30,7 @@ master:
     - rebuild:1.31
     - ssh-agent:1.17
     - prometheus:2.0.6
+    - kubernetes-cli:1.8.2
 
   initScripts:
     pipeline_init: |-
@@ -53,7 +54,7 @@ master:
       def jenkinsKeyUsernameWithPasswordParameters = [
         description:  'Access to DockerHub (user: pincher95)',
         id:           'dockerhub.pincher95',
-        secret:       'Yt304031800',
+        secret:       '123EVanmb',
         userName:     'pincher95'
       ]
 

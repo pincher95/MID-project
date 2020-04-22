@@ -57,7 +57,6 @@ resource "aws_security_group" "worker_group_mgmt_one" {
     to_port   = 22
     protocol  = "tcp"
     cidr_blocks = [
-      "209.88.185.5/32",
       "207.232.13.77/32",
       "192.168.1.0/32",
       "89.138.10.68/32"

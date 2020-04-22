@@ -102,3 +102,23 @@ extraScrapeConfigs: |
         replacement:   '$1:30056'
       - source_labels: [__meta_consul_node]
         target_label: instance
+  - job_name: 'mysql-exporter'
+    metrics_path: /metrics
+    consul_sd_configs:
+      - server: 'consul.service.consul:8500'
+    relabel_configs:
+      - source_labels: ['__meta_consul_service']
+        regex:  '.*mysql.*'
+        target_label: job
+        action: 'keep'
+      - source_labels: ['__meta_consul_tags']
+        regex:  '.*,mysql-metrics,.*'
+        target_label: job
+        action: 'keep'
+      - source_labels: ['__address__']
+        separator:     ':'
+        regex:         '(.*):(.*)'
+        target_label:  '__address__'
+        replacement:   '$1:9104'
+      - source_labels: [__meta_consul_node]
+        target_label: instance

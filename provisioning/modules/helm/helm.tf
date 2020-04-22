@@ -113,7 +113,7 @@ resource "helm_release" "filebeat" {
   values = [
     file("./charts/values-store/filebeat-values.yaml")
   ]
-  depends_on = [helm_release.logstash]
+  depends_on = [helm_release.elasticsearch]
 }
 
 resource "helm_release" "jenkins" {
@@ -124,6 +124,18 @@ resource "helm_release" "jenkins" {
   namespace = "kube-jenkins"
   values = [
     file("./charts/values-store/jenkins-values.yaml")
+  ]
+  depends_on = [null_resource.coreDNS-custom]
+}
+
+resource "helm_release" "mysql" {
+  chart = "mysql"
+  repository = data.helm_repository.stable.metadata[0].name
+  name = "mysql"
+  version = "1.6.3"
+  namespace = "kube-mysql"
+  values = [
+    file("./charts/values-store/mysql-values.yaml")
   ]
   depends_on = [null_resource.coreDNS-custom]
 }

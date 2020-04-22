@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#Due to bug in Terraform destory this is custom provisioned resources destroy
+#Due to bug in Terraform destroy this is custom provisioned resources destroy
 NAMESPACES=$(kubectl get namespaces |grep -vi 'default\|kube-system\|name' |awk '{print $1}')
 
 echo "Gathering and uninstalling deployed charts..."

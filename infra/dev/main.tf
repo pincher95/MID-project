@@ -88,6 +88,7 @@ module "k8s" {
   source = "../modules/k8s"
   private_subnet_id = module.vpc.privare_subnet
   public_subnet_id  = module.vpc.public_subnet
+  global_sg         = module.vpc.global_sg
   env = var.environment
   tags = ""
   vpc_id = module.vpc.vpc_id

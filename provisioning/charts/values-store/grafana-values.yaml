@@ -47,3 +47,6 @@ dashboards:
     nginx-ingress:
       gnetId: 9614
       datasource: Prometheus
+    mysql-exporter:
+      gnetId: 6239
+      datasource: Prometheus
