@@ -16,4 +16,7 @@ controller:
     service:
       annotations: {
         consul.hashicorp.com/service-tags: nginx-metrics
+        enable-vts-status: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "10254"
       }

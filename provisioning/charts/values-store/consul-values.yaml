@@ -4,8 +4,8 @@ global:
 
 server:
   # use 1 server
-  replicas: 1
-  bootstrapExpect: 1
+  replicas: 3
+  bootstrapExpect: 3
   disruptionBudget:
     enabled: true
     maxUnavailable: 0
@@ -24,7 +24,7 @@ syncCatalog:
 
 dns:
   enabled: true
-#  clusterIP: 172.20.4.180
+  clusterIP: 172.20.4.180
 
 ui:
   enabled: true
