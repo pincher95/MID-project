@@ -94,7 +94,7 @@ module "k8s" {
   vpc_id = module.vpc.vpc_id
   worker_group_name = ""
   worker_node_type = var.worker_type
-  worker_sg = module.vpc.worker_sg
+//  worker_sg = module.vpc.worker_sg
   bootstrap_key = module.key_pair.bootstrap_key
   namespaces = var.namespaces
 }

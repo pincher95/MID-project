@@ -77,7 +77,7 @@ resource "helm_release" "elasticsearch" {
   values = [
     file("./charts/values-store/elasticsearch-values.yaml")
   ]
-  depends_on = [helm_release.consul-helm]
+  depends_on = [helm_release.grafana]
 }
 
 resource "helm_release" "kibana" {
@@ -101,7 +101,7 @@ resource "helm_release" "logstash" {
   values = [
     file("./charts/values-store/logstash-values.yaml")
   ]
-  depends_on = [helm_release.elasticsearch]
+  depends_on = [helm_release.kibana]
 }
 
 resource "helm_release" "filebeat" {
@@ -113,7 +113,7 @@ resource "helm_release" "filebeat" {
   values = [
     file("./charts/values-store/filebeat-values.yaml")
   ]
-  depends_on = [helm_release.elasticsearch]
+  depends_on = [helm_release.logstash]
 }
 
 resource "helm_release" "jenkins" {
@@ -125,7 +125,7 @@ resource "helm_release" "jenkins" {
   values = [
     file("./charts/values-store/jenkins-values.yaml")
   ]
-  depends_on = [null_resource.coreDNS-custom]
+  depends_on = [helm_release.filebeat]
 }
 
 resource "helm_release" "mysql" {
@@ -137,7 +137,7 @@ resource "helm_release" "mysql" {
   values = [
     file("./charts/values-store/mysql-values.yaml")
   ]
-  depends_on = [null_resource.coreDNS-custom]
+  depends_on = [helm_release.jenkins]
 }
 
 resource "helm_release" "nginx-ingress" {
@@ -149,6 +149,6 @@ resource "helm_release" "nginx-ingress" {
   values = [
     file("./charts/values-store/nginx-values.yaml")
   ]
-  depends_on = [null_resource.coreDNS-custom]
+  depends_on = [helm_release.mysql]
 }
 

@@ -14,11 +14,11 @@ metadata:
     "app.kubernetes.io/instance": "{{ .Release.Name }}"
     "app.kubernetes.io/component": "{{ .Values.master.componentName }}"
 rules:
-- apiGroups: [""]
-  resources: ["pods", "pods/exec", "pods/log", "persistentvolumeclaims", "events"]
+- apiGroups: ["", "extensions/v1beta1", "autoscaling", "extensions", "apps"]
+  resources: ["pods", "pods/exec", "pods/log", "persistentvolumeclaims", "events", "horizontalpodautoscalers", "ingresses", "deployments", "services"]
   verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources: ["pods", "pods/exec", "persistentvolumeclaims"]
+- apiGroups: ["", "extensions/v1beta1", "autoscaling", "extensions", "apps"]
+  resources: ["pods", "pods/exec", "pods/log", "persistentvolumeclaims", "events", "horizontalpodautoscalers", "ingresses", "deployments", "services"]
   verbs: ["create", "delete", "deletecollection", "patch", "update"]
 
 ---

@@ -56,7 +56,7 @@ module "eks" {
       instance_type                            = var.worker_node_type
       additional_userdata                      = "echo foo bar"
       subnets                                  = var.private_subnet_id
-      additional_security_group_ids            = [var.worker_sg, var.global_sg]
+      additional_security_group_ids            = [var.global_sg]
       asg_desired_capacity                     = 6
       asg_min_size                             = 6
       asg_max_size                             = 6

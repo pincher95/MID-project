@@ -14,7 +14,7 @@ variable "worker_group_name" {}
 
 variable "env" {}
 
-variable "worker_sg" {}
+//variable "worker_sg" {}
 
 variable "bootstrap_key" {}
 
