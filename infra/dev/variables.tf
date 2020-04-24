@@ -73,13 +73,3 @@ variable "namespaces" {
   type = list(string)
   default = ["kube-consul", "kube-metrics", "kube-logging", "kube-jenkins", "kube-app", "kube-mysql", "nginx-ingress"]
 }
-#----------Jenkins Variables------------
-variable "default_locals" {
-  default = "true"
-}
-
-variable "jenkins_cred_path" {
-  description = "Jenkins credentials xml"
-  type = string
-  default = "./templates/credentials.xml.tpl"
-}

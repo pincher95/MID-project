@@ -50,40 +50,6 @@ module "bastion" {
   public_subnet     = module.vpc.public_subnet
 }
 
-//module "helm" {
-//  source = "..\/moduless\/helm"
-//  delay = module.k8s.delay
-//}
-
-//module "jenkins" {
-//  source          = "../modules/jenkins"
-//  jenkis_ec2_type = var.ec2_type
-//  jenkis_sg       = module.vpc.jenkins_sg
-//  global_sg       = module.vpc.global_sg
-//  consul_sg       = module.vpc.consul_sg
-//  private_key     = var.project_key_path
-//  public_key      = var.project_public_path
-//  private_key_pem = module.key_pair.project_private_key
-//  bastion_ip      = module.bastion.bastion_public_ip
-//  bootstrap_key   = module.key_pair.bootstrap_key
-//  private_subnet  = module.vpc.privare_subnet
-//  namespace       = var.namespace
-//  consul_join_tag_key   = var.consul_join_tag_key
-//  consul_join_tag_value = var.consul_join_tag_value
-//  instance_profile      = module.consul.instance_profile
-//}
-
-//module "nfs" {
-//  source          = "../modules/nfs"
-//  ec2_type        = var.ec2_type
-//  global_sg       = module.vpc.global_sg
-//  consul_sg       = module.vpc.consul_sg
-//  private_key     = var.project_key_path
-//  bastion_ip      = module.bastion.bastion_public_ip
-//  bootstrap_key   = module.key_pair.bootstrap_key
-//  private_subnet  = module.vpc.privare_subnet
-//}
-
 module "k8s" {
   source = "../modules/k8s"
   private_subnet_id = module.vpc.privare_subnet
@@ -94,21 +60,6 @@ module "k8s" {
   vpc_id = module.vpc.vpc_id
   worker_group_name = ""
   worker_node_type = var.worker_type
-//  worker_sg = module.vpc.worker_sg
   bootstrap_key = module.key_pair.bootstrap_key
   namespaces = var.namespaces
 }
-
-//module "consul" {
-//  source = "../modules/consul"
-//  availability_zone = ""
-//  private_subnet_id = module.vpc.privare_subnet
-//  consul_join_tag_key = var.consul_join_tag_key
-//  consul_join_tag_value = var.consul_join_tag_value
-//  consul_server_count = var.consul_servers
-//  ec2_type = var.ec2_type
-//  namespace = var.namespace
-//  bootstrap_key = module.key_pair.bootstrap_key
-//  consul_sg = module.vpc.consul_sg
-//  global_sg = module.vpc.global_sg
-//}
