@@ -22,21 +22,25 @@ This project is for learning purpose only and not for production purpose.
 https://github.com/pincher95/OpsSchool-project.git
 
 # Deploy and provision.
-cd OpsSchool-project
-./initscript apply
-
+````
+$ cd OpsSchool-project
+$ ./initscript apply
+````
 Take a big breath make coffee it's will take some time.
 
 # Access the Cluster
 Access Prometheus, Grafana, Kibana, Consul, Jenkins services via ssh tunnel.
 SSH bootstrap key to access the cluster created during infra deployment.
-OpsSchool-project/infra/keys/project.pem
-
+````
+$ OpsSchool-project/infra/keys/project.pem
+````
 ````
         -------------          -------------          -------------
 -----> |   Bastion   | -----> |  SSH Tunnel | -----> | ESK Cluster | 
         -------------          -------------          ------------- 
 ````
 # Destroy infra 
-cd OpsSchool-project
-./initscript destroy
+````
+$ cd OpsSchool-project
+$ ./initscript destroy
+````
