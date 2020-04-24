@@ -32,6 +32,6 @@ Access Prometheus, Grafana, Kibana, Consul, Jenkins services via ssh tunnel.
 SSH bootstrap key to access the cluster created during infra deployment.
 OpsSchool-project/infra/keys/project.pem
 
-        -------------          -------------          -------------
+echo         -------------          -------------          -------------
 -----> |   Bastion   | -----> |  SSH Tunnel | -----> | ESK Cluster | 
         -------------          -------------          ------------- 
