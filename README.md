@@ -37,3 +37,6 @@ OpsSchool-project/infra/keys/project.pem
 -----> |   Bastion   | -----> |  SSH Tunnel | -----> | ESK Cluster | 
         -------------          -------------          ------------- 
 ````
+# Destroy infra 
+cd OpsSchool-project
+./initscript destroy
