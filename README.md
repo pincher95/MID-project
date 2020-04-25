@@ -33,6 +33,8 @@ Access Prometheus, Grafana, Kibana, Consul, Jenkins services via ssh tunnel.
 SSH bootstrap key to access the cluster created during infra deployment.
 ````
 $ OpsSchool-project/infra/keys/project.pem
+$ ssh -A -t -i OpsSchool-project/infra/keys/project.pem ubuntu@<Bastion IP> -L7000:127.0.0.1:7000 \
+  ssh -A ec2-user@<EKS worker IP> -L7000:127.0.0.1:<Service Port>
 ````
 ````
         -------------          -------------          -------------
