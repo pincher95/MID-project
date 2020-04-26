@@ -54,8 +54,8 @@ master:
       def jenkinsKeyUsernameWithPasswordParameters = [
         description:  'Access to DockerHub (user: pincher95)',
         id:           'dockerhub.pincher95',
-        secret:       '123EVanmb',
-        userName:     'pincher95'
+        secret:       '<Docker Hub pass goes her>',
+        userName:     '<Docker Hub user goes her>'
       ]
 
       // get Jenkins instance

@@ -7,13 +7,13 @@ case "$1" in
     cd $WORKING_DIR/infra/dev
     terraform init &> /dev/null
     terraform plan &> /dev/null
-    terraform apply -auto-approve |grep -i "Apply complete" -A5 #2>&1 /dev/null
+    terraform apply -auto-approve #|grep -i "Apply complete" -A5
     cat ${WORKING_DIR}/kubeconfig > ~/.kube/config
     echo -e "\nProvisioning resources via Terrafom.....\n"
     cd $WORKING_DIR/provisioning
     terraform init &> /dev/null
     terraform plan &> /dev/null
-    terraform apply -auto-approve |grep -i "Apply complete" -A5
+    terraform apply -auto-approve #|grep -i "Apply complete" -A5
     ;;
   destroy)
     echo -e "Destroying provisioned resources...\n"
