@@ -32,21 +32,21 @@ dashboardProviders:
 
 dashboards:
   default:
-#    kubernetes-cluster:
-#      gnetId: 10000
+    kubernetes-cluster:
+      gnetId: 10000
+      datasource: Prometheus
+#    jenkins-master:
+#      gnetId: 9524
 #      datasource: Prometheus
-    jenkins-master:
-      gnetId: 9524
-      datasource: Prometheus
-    elasticsearch:
-      gnetId: 6483
-      datasource: Prometheus
-    grafan-internals:
-      gnetId: 3590
-      datasource: Prometheus
-    nginx-ingress:
-      gnetId: 9614
-      datasource: Prometheus
-    mysql-exporter:
-      gnetId: 6239
-      datasource: Prometheus
+#    elasticsearch:
+#      gnetId: 6483
+#      datasource: Prometheus
+#    grafan-internals:
+#      gnetId: 3590
+#      datasource: Prometheus
+#    nginx-ingress:
+#      gnetId: 9614
+#      datasource: Prometheus
+#    mysql-exporter:
+#      gnetId: 6239
+#      datasource: Prometheus

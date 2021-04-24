@@ -4,6 +4,11 @@ server:
     nodePort: 30090
   global:
     scrape_interval: 10s
+  persistentVolume:
+    ## If true, Prometheus server will create/use a Persistent Volume Claim
+    ## If false, use emptyDir
+    ##
+    enabled: false
 #extraScrapeConfigs: |
 #  - job_name: 'sample-job'
 #    scrape_interval: 1s
@@ -17,128 +22,128 @@ server:
 alertmanager:
   enabled: false
 
-extraScrapeConfigs: |
-  - job_name: 'jenkins-exporter'
-    metrics_path: /prometheus
-    consul_sd_configs:
-            - server: 'consul.service.consul:8500'
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        regex:  '.*jenkins.*'
-        target_label: job
-        # This will drop all targets that do not match the regex rule,
-        # leaving only the 'jenkins' targets
-        action: 'keep'
-      - source_labels: ['__meta_consul_tags']
-        regex:  '.*,jenkins-metrics,.*'
-        target_label: job
-        # This will drop all targets that do not match the regex rule,
-        # leaving only the 'jenkins' targets
-        action: 'keep'
-      - source_labels: ['__address__']
-        separator:     ':'
-        regex:         '(.*):(.*)'
-        target_label:  '__address__'
-        replacement:   '$1:32323'
-      - source_labels: [__meta_consul_node]
-        target_label: instance
-  - job_name: 'grafana-exporter'
-    metrics_path: /metrics
-    consul_sd_configs:
-      - server: 'consul.service.consul:8500'
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        regex:  '.*grafan.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__meta_consul_tags']
-        regex:  '.*,grafana-metrics,.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__address__']
-        separator:     ':'
-        regex:         '(.*):(.*)'
-        target_label:  '__address__'
-        replacement:   '$1:31080'
-      - source_labels: [__meta_consul_node]
-        target_label: instance
-  - job_name: 'elasticsearch-exporter'
-    metrics_path: /metrics
-    consul_sd_configs:
-      - server: 'consul.service.consul:8500'
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        regex:  '.*elasticsearch.*metrics.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__meta_consul_tags']
-        regex:  '.*,elasticsearch-metrics,.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__address__']
-        separator:     ':'
-        regex:         '(.*):(.*)'
-        target_label:  '__address__'
-        replacement:   '$1:9114'
-      - source_labels: [__meta_consul_node]
-        target_label: instance
-  - job_name: 'kibana-exporter'
-    metrics_path: /_prometheus/metrics
-    consul_sd_configs:
-      - server: 'consul.service.consul:8500'
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        regex:  '.*kibana.*metrics.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__meta_consul_tags']
-        regex:  '.*,kibana-metrics,.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__address__']
-        separator:     ':'
-        regex:         '(.*):(.*)'
-        target_label:  '__address__'
-        replacement:   '$1:30056'
-      - source_labels: [__meta_consul_node]
-        target_label: instance
-  - job_name: 'mysql-exporter'
-    metrics_path: /metrics
-    consul_sd_configs:
-      - server: 'consul.service.consul:8500'
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        regex:  '.*mysql.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__meta_consul_tags']
-        regex:  '.*,mysql-metrics,.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__address__']
-        separator:     ':'
-        regex:         '(.*):(.*)'
-        target_label:  '__address__'
-        replacement:   '$1:9104'
-      - source_labels: [__meta_consul_node]
-        target_label: instance
-  - job_name: 'nginx-exporter'
-    metrics_path: /metrics
-    consul_sd_configs:
-      - server: 'consul.service.consul:8500'
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        regex:  '.*nginx.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__meta_consul_tags']
-        regex:  '.*,nginx-metrics,.*'
-        target_label: job
-        action: 'keep'
-      - source_labels: ['__address__']
-        separator:     ':'
-        regex:         '(.*):(.*)'
-        target_label:  '__address__'
-        replacement:   '$1:10254'
-      - source_labels: [__meta_consul_node]
-        target_label: instance
+#extraScrapeConfigs: |
+#  - job_name: 'jenkins-exporter'
+#    metrics_path: /prometheus
+#    consul_sd_configs:
+#            - server: 'consul.service.consul:8500'
+#    relabel_configs:
+#      - source_labels: ['__meta_consul_service']
+#        regex:  '.*jenkins.*'
+#        target_label: job
+#        # This will drop all targets that do not match the regex rule,
+#        # leaving only the 'jenkins' targets
+#        action: 'keep'
+#      - source_labels: ['__meta_consul_tags']
+#        regex:  '.*,jenkins-metrics,.*'
+#        target_label: job
+#        # This will drop all targets that do not match the regex rule,
+#        # leaving only the 'jenkins' targets
+#        action: 'keep'
+#      - source_labels: ['__address__']
+#        separator:     ':'
+#        regex:         '(.*):(.*)'
+#        target_label:  '__address__'
+#        replacement:   '$1:32323'
+#      - source_labels: [__meta_consul_node]
+#        target_label: instance
+#  - job_name: 'grafana-exporter'
+#    metrics_path: /metrics
+#    consul_sd_configs:
+#      - server: 'consul.service.consul:8500'
+#    relabel_configs:
+#      - source_labels: ['__meta_consul_service']
+#        regex:  '.*grafan.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__meta_consul_tags']
+#        regex:  '.*,grafana-metrics,.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__address__']
+#        separator:     ':'
+#        regex:         '(.*):(.*)'
+#        target_label:  '__address__'
+#        replacement:   '$1:31080'
+#      - source_labels: [__meta_consul_node]
+#        target_label: instance
+#  - job_name: 'elasticsearch-exporter'
+#    metrics_path: /metrics
+#    consul_sd_configs:
+#      - server: 'consul.service.consul:8500'
+#    relabel_configs:
+#      - source_labels: ['__meta_consul_service']
+#        regex:  '.*elasticsearch.*metrics.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__meta_consul_tags']
+#        regex:  '.*,elasticsearch-metrics,.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__address__']
+#        separator:     ':'
+#        regex:         '(.*):(.*)'
+#        target_label:  '__address__'
+#        replacement:   '$1:9114'
+#      - source_labels: [__meta_consul_node]
+#        target_label: instance
+#  - job_name: 'kibana-exporter'
+#    metrics_path: /_prometheus/metrics
+#    consul_sd_configs:
+#      - server: 'consul.service.consul:8500'
+#    relabel_configs:
+#      - source_labels: ['__meta_consul_service']
+#        regex:  '.*kibana.*metrics.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__meta_consul_tags']
+#        regex:  '.*,kibana-metrics,.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__address__']
+#        separator:     ':'
+#        regex:         '(.*):(.*)'
+#        target_label:  '__address__'
+#        replacement:   '$1:30056'
+#      - source_labels: [__meta_consul_node]
+#        target_label: instance
+#  - job_name: 'mysql-exporter'
+#    metrics_path: /metrics
+#    consul_sd_configs:
+#      - server: 'consul.service.consul:8500'
+#    relabel_configs:
+#      - source_labels: ['__meta_consul_service']
+#        regex:  '.*mysql.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__meta_consul_tags']
+#        regex:  '.*,mysql-metrics,.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__address__']
+#        separator:     ':'
+#        regex:         '(.*):(.*)'
+#        target_label:  '__address__'
+#        replacement:   '$1:9104'
+#      - source_labels: [__meta_consul_node]
+#        target_label: instance
+#  - job_name: 'nginx-exporter'
+#    metrics_path: /metrics
+#    consul_sd_configs:
+#      - server: 'consul.service.consul:8500'
+#    relabel_configs:
+#      - source_labels: ['__meta_consul_service']
+#        regex:  '.*nginx.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__meta_consul_tags']
+#        regex:  '.*,nginx-metrics,.*'
+#        target_label: job
+#        action: 'keep'
+#      - source_labels: ['__address__']
+#        separator:     ':'
+#        regex:         '(.*):(.*)'
+#        target_label:  '__address__'
+#        replacement:   '$1:10254'
+#      - source_labels: [__meta_consul_node]
+#        target_label: instance

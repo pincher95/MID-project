@@ -31,7 +31,7 @@ variable "environment" {
 variable "ingress_ports" {
   type        = list(number)
   description = "list of ingress ports"
-  default     = [22]
+  default     = [22, 25, 11334]
 }
 #----------Compute Variables------------
 
@@ -66,7 +66,7 @@ variable "key_pair_names" {
 #----------k8s Variables---------------
 
 variable "worker_type" {
-  default = "t2.medium"
+  default = "t2.micro"
 }
 
 variable "namespaces" {

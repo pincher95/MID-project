@@ -61,3 +61,5 @@ provisioning/terraform.tfstate
 provisioning/terraform.tfstate.backup
 readme
 /charts/
+provisioning/.terraform.lock.hcl
+infra/.terraform/modules/modules.json
